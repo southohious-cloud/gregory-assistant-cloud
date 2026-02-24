@@ -1,6 +1,9 @@
 import os
 import streamlit as st
 from groq import Groq
+from PIL import Image
+import pdfplumber
+import pytesseract
 
 # -----------------------------
 # Environment + Client
@@ -32,6 +35,26 @@ def call_groq(messages):
         model="llama-3.3-70b-versatile",
         messages=messages,
     )
+    return response.choices[0].message.content
+
+
+# -----------------------------
+# Groq Summarization Function
+# -----------------------------
+def summarize_text_with_groq(text: str) -> str:
+    if not text or not text.strip():
+        return "I couldn't extract readable text from this file."
+
+    messages = [
+        {"role": "system", "content": "Summarize the following text concisely and clearly."},
+        {"role": "user", "content": text}
+    ]
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+    )
+
     return response.choices[0].message.content
 
 
@@ -80,6 +103,51 @@ if "display_history" not in st.session_state:
     st.session_state.display_history = [
         ("", "Online and ready. What would you like to do?")
     ]
+
+# -----------------------------
+# FILE UPLOAD (INSIDE CHAT AREA)
+# -----------------------------
+uploaded_file = st.file_uploader(
+    "Upload a file for instant summary (PDF, TXT, PNG, JPG)",
+    type=["pdf", "txt", "png", "jpg", "jpeg"],
+    label_visibility="visible"
+)
+
+if uploaded_file is not None:
+    # Show file receipt
+    with st.chat_message("assistant"):
+        st.markdown(f"📄 File received: **{uploaded_file.name}**")
+
+    file_type = uploaded_file.type
+    extracted_text = ""
+
+    # --- TXT ---
+    if file_type == "text/plain":
+        extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
+
+    # --- PDF ---
+    elif file_type == "application/pdf":
+        with pdfplumber.open(uploaded_file) as pdf:
+            extracted_text = "\n".join(
+                page.extract_text() or "" for page in pdf.pages
+            )
+
+    # --- IMAGE ---
+    elif file_type.startswith("image/"):
+        image = Image.open(uploaded_file)
+        extracted_text = pytesseract.image_to_string(image)
+
+    # Summarize with Groq
+    summary = summarize_text_with_groq(extracted_text)
+
+    # Add to history
+    st.session_state.messages.append({"role": "assistant", "content": summary})
+    st.session_state.display_history.append(("", summary))
+
+    # Display summary
+    with st.chat_message("assistant"):
+        st.markdown(summary)
+
 
 # -----------------------------
 # Display Chat History
