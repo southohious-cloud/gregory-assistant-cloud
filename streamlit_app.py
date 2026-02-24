@@ -3,7 +3,6 @@ import streamlit as st
 from groq import Groq
 from PIL import Image
 import pdfplumber
-import pytesseract
 
 # -----------------------------
 # Environment + Client
@@ -114,9 +113,9 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-    # Show file receipt
-    with st.chat_message("assistant"):
-        st.markdown(f"📄 File received: **{uploaded_file.name}**")
+    # Show file receipt (ONE TIME ONLY)
+    file_notice = f"📄 File received: **{uploaded_file.name}**"
+    st.session_state.display_history.append(("", file_notice))
 
     file_type = uploaded_file.type
     extracted_text = ""
@@ -132,21 +131,16 @@ if uploaded_file is not None:
                 page.extract_text() or "" for page in pdf.pages
             )
 
-    # --- IMAGE ---
+    # --- IMAGES (OCR removed for cloud stability) ---
     elif file_type.startswith("image/"):
-        image = Image.open(uploaded_file)
-        extracted_text = pytesseract.image_to_string(image)
+        extracted_text = "(Image text extraction is not available in this cloud version.)"
 
     # Summarize with Groq
     summary = summarize_text_with_groq(extracted_text)
 
-    # Add to history
+    # Add summary to history (NO immediate display → prevents duplication)
     st.session_state.messages.append({"role": "assistant", "content": summary})
     st.session_state.display_history.append(("", summary))
-
-    # Display summary
-    with st.chat_message("assistant"):
-        st.markdown(summary)
 
 
 # -----------------------------
