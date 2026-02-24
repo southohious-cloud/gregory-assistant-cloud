@@ -235,4 +235,4 @@ if user_input:
 # Footer
 # -----------------------------
 st.markdown("---")
-st.caption("Gregory’s Personal Assistant • Cloud Version")onal Assistant Cloud Version")
+st.caption("Gregory's Personal Assistant Cloud Version")
