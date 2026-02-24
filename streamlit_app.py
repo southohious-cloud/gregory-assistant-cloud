@@ -36,7 +36,6 @@ def call_groq(messages):
     )
     return response.choices[0].message.content
 
-
 # -----------------------------
 # Groq Summarization Function
 # -----------------------------
@@ -45,8 +44,11 @@ def summarize_text_with_groq(text: str) -> str:
         return "I couldn't extract readable text from this file."
 
     messages = [
-        {"role": "system", "content": "Summarize the following text concisely and clearly."},
-        {"role": "user", "content": text}
+        {
+            "role": "system",
+            "content": "Summarize the following text concisely and clearly. Focus on structure, key requirements, and actionable points."
+        },
+        {"role": "user", "content": text},
     ]
 
     response = client.chat.completions.create(
@@ -55,7 +57,6 @@ def summarize_text_with_groq(text: str) -> str:
     )
 
     return response.choices[0].message.content
-
 
 # -----------------------------
 # Streamlit Page Setup
@@ -81,6 +82,9 @@ with st.sidebar:
         st.session_state.display_history = [
             ("", "Online and ready. What would you like to do?")
         ]
+        st.session_state.last_document_text = None
+        st.session_state.last_document_name = None
+        st.session_state.last_document_summary = None
         st.rerun()
 
 # -----------------------------
@@ -103,6 +107,15 @@ if "display_history" not in st.session_state:
         ("", "Online and ready. What would you like to do?")
     ]
 
+if "last_document_text" not in st.session_state:
+    st.session_state.last_document_text = None
+
+if "last_document_name" not in st.session_state:
+    st.session_state.last_document_name = None
+
+if "last_document_summary" not in st.session_state:
+    st.session_state.last_document_summary = None
+
 # -----------------------------
 # FILE UPLOAD (INSIDE CHAT AREA)
 # -----------------------------
@@ -113,7 +126,7 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-    # Show file receipt (ONE TIME ONLY)
+    # File notice
     file_notice = f"📄 File received: **{uploaded_file.name}**"
     st.session_state.display_history.append(("", file_notice))
 
@@ -131,17 +144,35 @@ if uploaded_file is not None:
                 page.extract_text() or "" for page in pdf.pages
             )
 
-    # --- IMAGES (OCR removed for cloud stability) ---
+    # --- IMAGES (no OCR in cloud version) ---
     elif file_type.startswith("image/"):
         extracted_text = "(Image text extraction is not available in this cloud version.)"
 
     # Summarize with Groq
     summary = summarize_text_with_groq(extracted_text)
 
-    # Add summary to history (NO immediate display → prevents duplication)
-    st.session_state.messages.append({"role": "assistant", "content": summary})
-    st.session_state.display_history.append(("", summary))
+    # Store document context for follow-up questions
+    st.session_state.last_document_text = extracted_text
+    st.session_state.last_document_name = uploaded_file.name
+    st.session_state.last_document_summary = summary
 
+    # Add summary to history
+    doc_header = f"### Document Summary: {uploaded_file.name}"
+    st.session_state.display_history.append(("", doc_header))
+    st.session_state.display_history.append(("", summary))
+    st.session_state.messages.append({"role": "assistant", "content": f"Summary of {uploaded_file.name}:\n\n{summary}"})
+
+    # Add minimal follow-up suggestions
+    follow_up = (
+        "If you’d like, I can also:\n"
+        "- Extract key tasks or requirements\n"
+        "- Turn this into a checklist\n"
+        "- Break it into clear sections\n"
+        "- Explain any part in simpler terms\n\n"
+        "Just tell me what you want to do with this document."
+    )
+    st.session_state.display_history.append(("", follow_up))
+    st.session_state.messages.append({"role": "assistant", "content": follow_up})
 
 # -----------------------------
 # Display Chat History
@@ -164,9 +195,28 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Prepare messages for Groq
+    # Build messages for Groq, including document context if present
     messages = st.session_state.messages.copy()
     messages.append({"role": "user", "content": user_input})
+
+    # If a document is active, give Groq structured context
+    if st.session_state.last_document_text and st.session_state.last_document_name:
+        doc_context = (
+            f"The user has uploaded a document named '{st.session_state.last_document_name}'. "
+            f"Here is the document content (possibly truncated):\n\n"
+            f"{st.session_state.last_document_text[:6000]}"
+        )
+        messages.insert(
+            1,
+            {
+                "role": "system",
+                "content": (
+                    "You have access to the following document context. Use it to answer questions, "
+                    "extract tasks, create checklists, or explain sections when relevant.\n\n"
+                    + doc_context
+                ),
+            },
+        )
 
     # Get assistant reply
     assistant_reply = call_groq(messages)
@@ -185,4 +235,4 @@ if user_input:
 # Footer
 # -----------------------------
 st.markdown("---")
-st.caption("Gregory’s Personal Assistant • Cloud Version")
+st.caption("Gregory’s Personal Assistant • Cloud Version")onal Assistant • Cloud Version")
