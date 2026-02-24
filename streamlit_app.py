@@ -59,7 +59,7 @@ with st.sidebar:
         st.session_state.display_history = [
             ("", "Online and ready. What would you like to do?")
         ]
-        st.experimental_rerun()
+        st.rerun()
 
 # -----------------------------
 # Title + Greeting
