@@ -64,6 +64,45 @@ If the user asks for something outside these modes, follow normal assistant beha
 """
 
 # -----------------------------
+# Formatting Wrapper
+# -----------------------------
+def format_output_with_headers(raw_output: str, mode: str) -> str:
+    """
+    Ensures clean, consistent section headers for all modes.
+    If the model already includes headers, they are preserved.
+    If not, headers are inserted automatically.
+    """
+
+    text = raw_output.strip()
+
+    headers = {
+        "Summary": ["Summary"],
+        "Explanation": ["Explanation"],
+        "Key Points": ["Key Points"],
+        "Next Steps": ["Next Steps"],
+        "Everything": ["Summary", "Explanation", "Key Points", "Next Steps"]
+    }
+
+    expected = headers.get(mode, [])
+
+    # If the model already includes any expected header, return as-is
+    if any(h.lower() in text.lower() for h in expected):
+        return text
+
+    # Single-mode formatting
+    if mode != "Everything":
+        return f"### {mode}\n\n{text}"
+
+    # Everything Mode → split into four sections
+    parts = text.split("\n\n")
+    cleaned = []
+
+    for header, content in zip(expected, parts):
+        cleaned.append(f"### {header}\n\n{content.strip()}")
+
+    return "\n\n".join(cleaned)
+
+# -----------------------------
 # Groq Chat Function
 # -----------------------------
 def call_groq(messages):
@@ -205,7 +244,10 @@ if uploaded_file is not None:
         messages=messages,
     )
 
-    output = response.choices[0].message.content
+    raw_output = response.choices[0].message.content
+
+    # ⭐ NEW: Clean, consistent section headers
+    output = format_output_with_headers(raw_output, processing_mode)
 
     # Store document context
     st.session_state.last_document_text = extracted_text
