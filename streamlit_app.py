@@ -70,8 +70,9 @@ st.set_page_config(
 # Sidebar
 # -----------------------------
 with st.sidebar:
-    st.header("Gregory’s Assistant")
-    st.write("Cloud Version")
+    st.sidebar.title("Gregory’s Personal Assistant")
+    st.sidebar.caption("Cloud Version")
+    
     st.write("Status: **Online**")
 
     if st.button("Reset Conversation"):
