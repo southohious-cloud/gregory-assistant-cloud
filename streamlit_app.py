@@ -329,9 +329,9 @@ mode_instruction = {
     
     # ⭐ NEW: Groq call using selected mode
 messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "system", "content": mode_instruction},
-        {"role": "user", "content": extracted_text}
+    {"role": "system", "content": SYSTEM_PROMPT},
+    {"role": "system", "content": mode_instruction},
+    {"role": "user", "content": extracted_text}
 ]
 
     # ⭐ NEW: Mode Instruction
