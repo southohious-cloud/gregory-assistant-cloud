@@ -364,7 +364,7 @@ response = client.chat.completions.create(
     messages=messages,
     )
 
-    raw_output = response.choices[0].message.content
+raw_output = response.choices[0].message.content
 
     # ⭐ NEW: Clean, consistent section headers
 output = format_output_with_headers(raw_output, st.session_state.processing_mode)
