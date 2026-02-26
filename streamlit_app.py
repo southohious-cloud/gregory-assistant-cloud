@@ -370,9 +370,9 @@ raw_output = response.choices[0].message.content
 output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
     # Store document context
-    st.session_state.last_document_text = extracted_text
-    st.session_state.last_document_name = uploaded_file.name
-    st.session_state.last_document_summary = output
+st.session_state.last_document_text = extracted_text
+st.session_state.last_document_name = uploaded_file.name
+st.session_state.last_document_summary = output
 
     # Display output
     doc_header = f"### {st.session_state.processing_mode}: {uploaded_file.name}"
