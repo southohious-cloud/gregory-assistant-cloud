@@ -312,20 +312,20 @@ if uploaded_file is not None:
     elif file_type.startswith("image/"):
         extracted_text = "(Image text extraction is not available in this cloud version.)"
 
-    # ⭐ NEW: Mode Instruction
-    mode_instruction = {
-        "Summary": "Provide a concise, neutral summary of the document.",
-        "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
-        "Key Points": "Extract the most important key points from the document.",
-        "Next Steps": "Suggest reasonable next steps based on the document, without giving medical, legal, or financial advice.",
-        "Everything": (
-            "Provide all four sections in this order:\n"
-            "1. Summary\n"
-            "2. Explanation\n"
-            "3. Key Points\n"
-            "4. Next Steps"
-        )
-    }
+   # ⭐ NEW: Mode Instruction
+mode_instruction = {
+    "Summary": "Provide a concise, neutral summary of the document.",
+    "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
+    "Key Points": "Extract the most important key points from the document.",
+    "Next Steps": "Suggest reasonable next steps based on the document, without giving medical, legal, or financial advice.",
+    "Everything": (
+        "Provide all four sections in this order:\n"
+        "1. Summary\n"
+        "2. Explanation\n"
+        "3. Key Points\n"
+        "4. Next Steps"
+    )
+}
     [processing_mode]
 
     # ⭐ NEW: Groq call using selected mode
