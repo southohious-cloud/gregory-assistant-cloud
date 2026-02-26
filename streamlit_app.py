@@ -332,6 +332,32 @@ if uploaded_file is not None:
     st.session_state.display_history.append(("", output))
     st.session_state.messages.append({"role": "assistant", "content": output})
 
+# ⭐ NEW: Post-output transformation buttons
+action = add_transformation_buttons()
+
+if action:
+    transform_instruction = f"Transform the previous output using this instruction: {action}. Do not add new information."
+
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": transform_instruction},
+        {"role": "user", "content": st.session_state.last_document_summary}
+    ]
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+    )
+
+    transformed = response.choices[0].message.content
+
+    # Display transformed output
+    st.session_state.display_history.append(("", f"### {action}"))
+    st.session_state.display_history.append(("", transformed))
+    st.session_state.messages.append({"role": "assistant", "content": transformed})
+
+    st.rerun()
+
 # -----------------------------
 # Display Chat History
 # -----------------------------
