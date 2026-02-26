@@ -218,6 +218,7 @@ st.set_page_config(
     layout="centered",
 )
 
+# -----------------------------
 # Sidebar
 # -----------------------------
 with st.sidebar:
