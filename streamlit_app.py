@@ -325,7 +325,7 @@ mode_instruction = {
         "3. Key Points\n"
         "4. Next Steps"
     )
-}[processing_mode]
+}
     
     # ⭐ NEW: Groq call using selected mode
     messages = [
