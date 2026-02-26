@@ -328,6 +328,8 @@ mode_instruction = {
 }
     
     # ⭐ NEW: Groq call using selected mode
+extracted_text = extract_text(uploaded_file)
+
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
     {"role": "system", "content": mode_instruction},
