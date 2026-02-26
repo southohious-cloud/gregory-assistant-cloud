@@ -353,7 +353,7 @@ MODE_INSTRUCTIONS = {
 mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
 
     # ⭐ NEW: Groq call using selected mode
-    messages = [
+messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": mode_instruction},
         {"role": "user", "content": extracted_text}
@@ -367,7 +367,7 @@ mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
     raw_output = response.choices[0].message.content
 
     # ⭐ NEW: Clean, consistent section headers
-    output = format_output_with_headers(raw_output, st.session_state.processing_mode)
+output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
     # Store document context
     st.session_state.last_document_text = extracted_text
