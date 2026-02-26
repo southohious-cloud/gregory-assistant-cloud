@@ -69,8 +69,7 @@ If the user asks for something outside these modes, follow normal assistant beha
 def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
     Ensures clean, consistent section headers for all modes.
-    If the model already includes headers, they are preserved.
-    If not, headers are inserted automatically.
+    Also enforces bullet formatting for Key Points and Next Steps.
     """
 
     text = raw_output.strip()
@@ -85,20 +84,33 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
     expected = headers.get(mode, [])
 
-    # If the model already includes any expected header, return as-is
+    # If model already includes headers, return as-is
     if any(h.lower() in text.lower() for h in expected):
         return text
 
     # Single-mode formatting
     if mode != "Everything":
-        return f"### {mode}\n\n{text}"
+        formatted = f"### {mode}\n\n{text}"
+
+        # Enforce bullets for specific modes
+        if mode in ["Key Points", "Next Steps"]:
+            body = enforce_bullet_points(text)
+            formatted = f"### {mode}\n\n{body}"
+
+        return formatted
 
     # Everything Mode → split into four sections
     parts = text.split("\n\n")
     cleaned = []
 
     for header, content in zip(expected, parts):
-        cleaned.append(f"### {header}\n\n{content.strip()}")
+        content = content.strip()
+
+        # Enforce bullets for Key Points + Next Steps
+        if header in ["Key Points", "Next Steps"]:
+            content = enforce_bullet_points(content)
+
+        cleaned.append(f"### {header}\n\n{content}")
 
     return "\n\n".join(cleaned)
 
