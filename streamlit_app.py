@@ -334,7 +334,32 @@ messages = [
         {"role": "user", "content": extracted_text}
 ]
 
-response = client.chat.completions.create(
+    # ⭐ NEW: Mode Instruction
+    MODE_INSTRUCTIONS = {
+        "Summary": "Provide a concise, neutral summary of the document.",
+        "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
+        "Key Points": "Extract the most important key points from the document.",
+        "Next Steps": "Suggest reasonable next steps based on the document, without giving medical, legal, or financial advice.",
+        "Everything": (
+            "Provide all four sections in this order:\n"
+            "1. Summary\n"
+            "2. Explanation\n"
+            "3. Key Points\n"
+            "4. Next Steps"
+        )
+    }
+
+    # ⭐ Select correct instruction
+    mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
+
+    # ⭐ NEW: Groq call using selected mode
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": mode_instruction},
+        {"role": "user", "content": extracted_text}
+    ]
+
+    response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=messages,
     )
