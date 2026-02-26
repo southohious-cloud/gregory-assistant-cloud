@@ -325,7 +325,8 @@ if uploaded_file is not None:
             "3. Key Points\n"
             "4. Next Steps"
         )
-    }[processing_mode]
+    }
+    [processing_mode]
 
     # ⭐ NEW: Groq call using selected mode
     messages = [
