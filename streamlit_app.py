@@ -335,7 +335,7 @@ messages = [
 ]
 
     # ⭐ NEW: Mode Instruction
-    MODE_INSTRUCTIONS = {
+MODE_INSTRUCTIONS = {
         "Summary": "Provide a concise, neutral summary of the document.",
         "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
         "Key Points": "Extract the most important key points from the document.",
