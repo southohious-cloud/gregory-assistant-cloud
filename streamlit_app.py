@@ -174,6 +174,32 @@ def add_transformation_buttons():
 
     return None
 
+def render_collapsible_history(history):
+    """
+    Renders chat history using collapsible sections to prevent clutter.
+    The most recent assistant message is shown fully.
+    Older messages are collapsed.
+    """
+    if not history:
+        return
+
+    # Show the last message fully
+    last_user, last_assistant = history[-1]
+    if last_user:
+        with st.chat_message("user"):
+            st.markdown(last_user)
+    if last_assistant:
+        with st.chat_message("assistant"):
+            st.markdown(last_assistant)
+
+    # Render older messages collapsed
+    for user_msg, assistant_msg in history[:-1]:
+        with st.expander("Previous Output", expanded=False):
+            if user_msg:
+                st.markdown(f"**User:**\n\n{user_msg}")
+            if assistant_msg:
+                st.markdown(f"**Assistant:**\n\n{assistant_msg}")
+
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
