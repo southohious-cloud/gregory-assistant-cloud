@@ -327,7 +327,7 @@ mode_instruction = {
     )
 }
 
-# ⭐ NEW: Groq call using selected mode
+    # ⭐ NEW: Groq call using selected mode
 extracted_text = extract_text(uploaded_file)
 
 messages = [
