@@ -332,7 +332,7 @@ messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": mode_instruction},
         {"role": "user", "content": extracted_text}
-    ]
+]
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
