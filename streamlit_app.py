@@ -146,6 +146,34 @@ def normalize_spacing(text: str) -> str:
 
     return "\n".join(cleaned)
 
+def add_transformation_buttons():
+    """
+    Renders post-output transformation buttons and returns the selected action.
+    Returns None if no button was pressed.
+    """
+    st.markdown("### Additional Options")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        simpler = st.button("Rewrite simpler")
+        formal = st.button("Rewrite more formal")
+        email = st.button("Rewrite as email")
+
+    with col2:
+        checklist = st.button("Rewrite as checklist")
+        steps = st.button("Rewrite as step-by-step plan")
+        deeper = st.button("Explain deeper")
+
+    if simpler: return "Rewrite simpler"
+    if formal: return "Rewrite more formal"
+    if email: return "Rewrite as email"
+    if checklist: return "Rewrite as checklist"
+    if steps: return "Rewrite as step-by-step plan"
+    if deeper: return "Explain deeper"
+
+    return None
+
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
