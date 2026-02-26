@@ -359,9 +359,9 @@ messages = [
         {"role": "user", "content": extracted_text}
     ]
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=messages,
+response = client.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=messages,
     )
 
     raw_output = response.choices[0].message.content
