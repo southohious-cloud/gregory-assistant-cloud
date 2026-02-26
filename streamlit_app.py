@@ -385,15 +385,9 @@ if action:
     st.rerun()
 
 # -----------------------------
-# Display Chat History
+# Display Chat History (Collapsible)
 # -----------------------------
-for user_msg, assistant_msg in st.session_state.display_history:
-    if user_msg:
-        with st.chat_message("user"):
-            st.markdown(user_msg)
-    if assistant_msg:
-        with st.chat_message("assistant"):
-            st.markdown(assistant_msg)
+render_collapsible_history(st.session_state.display_history)
 
 # -----------------------------
 # Chat Input
