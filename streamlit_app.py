@@ -350,7 +350,7 @@ MODE_INSTRUCTIONS = {
     }
 
     # ⭐ Select correct instruction
-    mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
+mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
 
     # ⭐ NEW: Groq call using selected mode
     messages = [
