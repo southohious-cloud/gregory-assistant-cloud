@@ -114,6 +114,38 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
     return "\n\n".join(cleaned)
 
+def normalize_spacing(text: str) -> str:
+    """
+    Cleans up spacing:
+    - Ensures exactly one blank line between sections
+    - Removes double or triple blank lines
+    - Removes leading/trailing whitespace
+    """
+
+    # Split into lines and strip whitespace
+    lines = [line.rstrip() for line in text.split("\n")]
+
+    cleaned = []
+    blank = False
+
+    for line in lines:
+        if line.strip() == "":
+            # Only allow ONE blank line in a row
+            if not blank:
+                cleaned.append("")
+            blank = True
+        else:
+            cleaned.append(line)
+            blank = False
+
+    # Remove leading/trailing blank lines
+    while cleaned and cleaned[0] == "":
+        cleaned.pop(0)
+    while cleaned and cleaned[-1] == "":
+        cleaned.pop()
+
+    return "\n".join(cleaned)
+
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
