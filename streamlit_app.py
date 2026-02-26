@@ -342,7 +342,7 @@ messages = [
     raw_output = response.choices[0].message.content
 
     # ⭐ NEW: Clean, consistent section headers
-    output = format_output_with_headers(raw_output, processing_mode)
+    output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
     # Store document context
     st.session_state.last_document_text = extracted_text
@@ -350,20 +350,23 @@ messages = [
     st.session_state.last_document_summary = output
 
     # Display output
-    doc_header = f"### {processing_mode}: {uploaded_file.name}"
+    doc_header = f"### {st.session_state.processing_mode}: {uploaded_file.name}"
     st.session_state.display_history.append(("", doc_header))
     st.session_state.display_history.append(("", output))
-    
+
 # ⭐ NEW: Post-output transformation buttons
 action = add_transformation_buttons()
 
 if action:
-    transform_instruction = f"Transform the previous output using this instruction: {action}. Do not add new information."
+    transform_instruction = (
+        f"Transform the previous output using this instruction: {action}. "
+        f"Do not add new information."
+    )
 
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": transform_instruction},
-        {"role": "user", "content": st.session_state.last_document_summary}
+        {"role": "user", "content": st.session_state.last_document_summary},
     ]
 
     response = client.chat.completions.create(
