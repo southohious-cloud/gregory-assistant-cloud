@@ -218,7 +218,6 @@ st.set_page_config(
     layout="centered",
 )
 
-# -----------------------------
 # Sidebar
 # -----------------------------
 with st.sidebar:
@@ -241,6 +240,9 @@ with st.sidebar:
         index=0
     )
 
+    # ⭐ FIX: Store the selected mode so the rest of the app uses it
+    st.session_state.processing_mode = processing_mode
+
     if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -252,14 +254,8 @@ with st.sidebar:
         st.session_state.last_document_text = None
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
-        st.rerun()
-
-# -----------------------------
-# Title + Greeting
-# -----------------------------
-st.title("Gregory's Personal Assistant (Cloud Version)")
-st.caption("Powered by Groq • Clean • Fast • Predictable")
-
+        st.rerun
+        
 # -----------------------------
 # Session State Initialization
 # -----------------------------
