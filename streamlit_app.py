@@ -476,7 +476,7 @@ messages = [
     st.session_state.last_document_summary = output
 
     # Display output
-    doc_header = f"### {st.session_state.processing_mode}: {uploaded_file.name}"
+    doc_header = f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}"
     st.session_state.display_history.append(("", doc_header))
     st.session_state.display_history.append(("", output))
     
