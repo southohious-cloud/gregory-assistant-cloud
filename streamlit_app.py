@@ -412,61 +412,51 @@ uploaded_file = st.file_uploader(
 # 2. OR the mode changed AND we have a previous document
 if uploaded_file is not None or (mode_changed and st.session_state.last_document_text):
 
-    # -----------------------------
-    # CASE 1 — New file uploaded
-    # -----------------------------
-    if uploaded_file is not None:
-        file_notice = f"📄 File received: **{uploaded_file.name}**"
-        st.session_state.display_history.append(("", file_notice))
+# -----------------------------
+# CASE 1 — New file uploaded
+# -----------------------------
+if uploaded_file is not None:
+    file_notice = f"📄 File received: **{uploaded_file.name}**"
+    st.session_state.display_history.append(("", file_notice))
 
-        file_type = uploaded_file.type
+    file_type = uploaded_file.type
 
-        # Extract text normally
-        if file_type == "text/plain":
-            extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
+    # Extract text normally
+    if file_type == "text/plain":
+        extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
 
-        elif file_type == "application/pdf":
-            with pdfplumber.open(uploaded_file) as pdf:
-                extracted_text = "\n".join(
-                    page.extract_text() or "" for page in pdf.pages
-                )
+    elif file_type == "application/pdf":
+        with pdfplumber.open(uploaded_file) as pdf:
+            extracted_text = "\n".join(
+                page.extract_text() or "" for page in pdf.pages
+            )
 
-        elif file_type.startswith("image/"):
-            extracted_text = "(Image text extraction is not available in this cloud version.)"
+    elif file_type.startswith("image/"):
+        extracted_text = "(Image text extraction is not available in this cloud version.)"
 
-        # Save for auto-reprocessing
-        st.session_state.last_document_text = extracted_text
-        st.session_state.last_document_name = uploaded_file.name
+    # Save for auto-reprocessing
+    st.session_state.last_document_text = extracted_text
+    st.session_state.last_document_name = uploaded_file.name
 
-    # -----------------------------
-    # CASE 2 — Mode changed, no new file
-    # -----------------------------
-    else:
-        extracted_text = st.session_state.last_document_text
-        
-    # ⭐ NEW: Mode Instruction
-    MODE_INSTRUCTIONS = {
-        "Summary": "Provide a concise, neutral summary of the document.",
-        "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
-        "Key Points": "Extract the most important key points from the document.",
-        "Next Steps": "Suggest reasonable next steps based on the document, without giving medical, legal, or financial advice.",
-        "Everything": (
-            "Provide all four sections in this order:\n"
-            "1. Summary\n"
-            "2. Explanation\n"
-            "3. Key Points\n"
-            "4. Next Steps"
-        )
-    }
+# -----------------------------
+# CASE 2 — Mode changed, no new file
+# -----------------------------
+else:
+    extracted_text = st.session_state.last_document_text
 
-    mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
+# -----------------------------
+# Use the UPDATED global mode_instruction dictionary
+# -----------------------------
+instruction = mode_instruction[st.session_state.processing_mode]
 
-    # ⭐ Build messages
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "system", "content": mode_instruction},
-        {"role": "user", "content": extracted_text}
-    ]
+# -----------------------------
+# Build messages correctly
+# -----------------------------
+messages = [
+    {"role": "system", "content": SYSTEM_PROMPT},
+    {"role": "system", "content": instruction},   # ✔ correct: selected instruction string
+    {"role": "user", "content": extracted_text}   # ✔ correct: document text
+]
 
     # ⭐ Groq call
     response = client.chat.completions.create(
