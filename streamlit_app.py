@@ -1,3 +1,9 @@
+import os
+import streamlit as st
+from groq import Groq
+from PIL import Image
+import pdfplumber
+
 # -----------------------------
 # Initialize session state
 # -----------------------------
@@ -15,12 +21,6 @@ if "last_document_name" not in st.session_state:
 
 if "last_document_summary" not in st.session_state:
     st.session_state.last_document_summary = None
-    
-import os
-import streamlit as st
-from groq import Groq
-from PIL import Image
-import pdfplumber
 
 # -----------------------------
 # Environment + Client
