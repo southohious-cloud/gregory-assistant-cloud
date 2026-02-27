@@ -70,6 +70,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
     Ensures clean, consistent section headers for all modes.
     Also enforces bullet formatting for Key Points and Next Steps.
+    For non-Everything modes, it aggressively trims extra sections.
     """
 
     text = raw_output.strip()
@@ -79,27 +80,36 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         "Explanation": ["Explanation"],
         "Key Points": ["Key Points"],
         "Next Steps": ["Next Steps"],
-        "Everything": ["Summary", "Explanation", "Key Points", "Next Steps"]
+        "Everything": ["Summary", "Explanation", "Key Points", "Next Steps"],
     }
 
     expected = headers.get(mode, [])
 
-    # If model already includes headers, return as-is
-    if any(h.lower() in text.lower() for h in expected):
-        return text
-
-    # Single-mode formatting
+    # 🔹 Single-mode behavior: force ONLY that section
     if mode != "Everything":
-        formatted = f"### {mode}\n\n{text}"
+        # If the model returned multiple sections, keep only the first chunk
+        # before any other known header like "Explanation", "Key Points", etc.
+        split_markers = ["\n### Explanation", "\n### Key Points", "\n### Next Steps"]
+        cut_index = len(text)
+        for marker in split_markers:
+            idx = text.lower().find(marker.lower())
+            if idx != -1:
+                cut_index = min(cut_index, idx)
+
+        text = text[:cut_index].strip()
+
+        # Ensure we have a header for this mode
+        if not any(h.lower() in text.lower() for h in expected):
+            text = f"### {mode}\n\n{text}"
 
         # Enforce bullets for specific modes
         if mode in ["Key Points", "Next Steps"]:
             body = enforce_bullet_points(text)
-            formatted = f"### {mode}\n\n{body}"
+            return body
 
-        return formatted
+        return text
 
-    # Everything Mode → split into four sections
+    # 🔹 Everything mode → split into four sections
     parts = text.split("\n\n")
     cleaned = []
 
@@ -113,39 +123,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned.append(f"### {header}\n\n{content}")
 
     return "\n\n".join(cleaned)
-
-def normalize_spacing(text: str) -> str:
-    """
-    Cleans up spacing:
-    - Ensures exactly one blank line between sections
-    - Removes double or triple blank lines
-    - Removes leading/trailing whitespace
-    """
-
-    # Split into lines and strip whitespace
-    lines = [line.rstrip() for line in text.split("\n")]
-
-    cleaned = []
-    blank = False
-
-    for line in lines:
-        if line.strip() == "":
-            # Only allow ONE blank line in a row
-            if not blank:
-                cleaned.append("")
-            blank = True
-        else:
-            cleaned.append(line)
-            blank = False
-
-    # Remove leading/trailing blank lines
-    while cleaned and cleaned[0] == "":
-        cleaned.pop(0)
-    while cleaned and cleaned[-1] == "":
-        cleaned.pop()
-
-    return "\n".join(cleaned)
-
+    
 def add_transformation_buttons():
     """
     Renders post-output transformation buttons and returns the selected action.
