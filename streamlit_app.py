@@ -422,7 +422,7 @@ if uploaded_file is not None:
 
     file_type = uploaded_file.type
 
-    # Extract text normally
+# Extract text normally
     if file_type == "text/plain":
         extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
 
