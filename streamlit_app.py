@@ -61,18 +61,22 @@ When performing a transformation:
 # -----------------------------
 def enforce_bullet_points(text: str) -> str:
     """
-    Ensures each line in Key Points or Next Steps is formatted as a bullet.
-    Removes empty lines and normalizes spacing.
+    Normalizes all bullet styles to '- ' and ensures each line is a clean bullet.
+    Removes empty lines and strips any existing bullet symbols.
     """
     lines = [line.strip() for line in text.split("\n") if line.strip()]
 
+    bullet_symbols = ["•", "○", "●", "*", "-", "▪", "·", "‣", "–"]
+
     bullet_lines = []
     for line in lines:
-        # Avoid double bullets
-        if line.startswith("- "):
-            bullet_lines.append(line)
-        else:
-            bullet_lines.append(f"- {line}")
+        # Remove any leading bullet symbol + space
+        cleaned = line
+        for sym in bullet_symbols:
+            if cleaned.startswith(sym):
+                cleaned = cleaned[len(sym):].strip()
+        # Add a single consistent bullet
+        bullet_lines.append(f"- {cleaned}")
 
     return "\n".join(bullet_lines)
 
