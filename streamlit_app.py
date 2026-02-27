@@ -351,7 +351,6 @@ with st.sidebar:
         st.session_state.last_document_summary = None
         st.rerun()
 
-
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
