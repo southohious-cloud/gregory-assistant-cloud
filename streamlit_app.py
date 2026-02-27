@@ -145,42 +145,6 @@ def add_transformation_buttons():
 
     return None
 
-def render_collapsible_history(history):
-    """
-    Renders chat history using collapsible sections to prevent clutter.
-    The most recent assistant message is shown fully.
-    Older messages are collapsed.
-    """
-    if not history:
-        return
-
-    # Show the last message fully
-    last_user, last_assistant = history[-1]
-    if last_user:
-        with st.chat_message("user"):
-            st.markdown(last_user)
-    if last_assistant:
-        with st.chat_message("assistant"):
-            st.markdown(last_assistant)
-
-    # Render older messages collapsed
-    for user_msg, assistant_msg in history[:-1]:
-        with st.expander("Previous Output", expanded=False):
-            if user_msg:
-                st.markdown(f"**User:**\n\n{user_msg}")
-            if assistant_msg:
-                st.markdown(f"**Assistant:**\n\n{assistant_msg}")
-
-# -----------------------------
-# Groq Chat Function
-# -----------------------------
-def call_groq(messages):
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=messages,
-    )
-    return response.choices[0].message.content
-
 # -----------------------------
 # Streamlit Page Setup
 # -----------------------------
@@ -188,6 +152,33 @@ st.set_page_config(
     page_title="Gregory's Personal Assistant (Cloud Version)",
     layout="centered",
 )
+
+# -----------------------------
+# Session State Initialization
+# -----------------------------
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "assistant", "content": "Online and ready. What would you like to do?"}
+    ]
+
+if "display_history" not in st.session_state:
+    st.session_state.display_history = [
+        ("", "Online and ready. What would you like to do?")
+    ]
+
+if "last_document_text" not in st.session_state:
+    st.session_state.last_document_text = None
+
+if "last_document_name" not in st.session_state:
+    st.session_state.last_document_name = None
+
+if "last_document_summary" not in st.session_state:
+    st.session_state.last_document_summary = None
+
+if "processing_mode" not in st.session_state:
+    st.session_state.processing_mode = "Summary"
+
 
 # -----------------------------
 # Sidebar
@@ -198,7 +189,6 @@ with st.sidebar:
     
     st.write("Status: **Online**")
 
-    # ⭐ NEW: Mode Selector (CORRECTED)
     st.markdown("### Document Processing Mode")
     processing_mode = st.radio(
         "Choose how I should process uploaded documents:",
@@ -224,30 +214,47 @@ with st.sidebar:
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
         st.rerun()
-        
+
+
 # -----------------------------
-# Session State Initialization
+# Groq Chat Function
 # -----------------------------
-if "messages" not in st.session_state:
-    st.session_state.messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "assistant", "content": "Online and ready. What would you like to do?"}
-    ]
+def call_groq(messages):
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+    )
+    return response.choices[0].message.content
 
-if "display_history" not in st.session_state:
-    st.session_state.display_history = [
-        ("", "Online and ready. What would you like to do?")
-    ]
 
-if "last_document_text" not in st.session_state:
-    st.session_state.last_document_text = None
+# -----------------------------
+# Collapsible History Renderer
+# -----------------------------
+def render_collapsible_history(history):
+    """
+    Renders chat history using collapsible sections to prevent clutter.
+    The most recent assistant message is shown fully.
+    Older messages are collapsed.
+    """
+    if not history:
+        return
 
-if "last_document_name" not in st.session_state:
-    st.session_state.last_document_name = None
+    # Show the last message fully
+    last_user, last_assistant = history[-1]
+    if last_user:
+        with st.chat_message("user"):
+            st.markdown(last_user)
+    if last_assistant:
+        with st.chat_message("assistant"):
+            st.markdown(last_assistant)
 
-if "last_document_summary" not in st.session_state:
-    st.session_state.last_document_summary = None
-
+    # Render older messages collapsed
+    for user_msg, assistant_msg in history[:-1]:
+        with st.expander("Previous Output", expanded=False):
+            if user_msg:
+                st.markdown(f"**User:**\n\n{user_msg}")
+            if assistant_msg:
+                st.markdown(f"**Assistant:**\n\n{assistant_msg}")
 # -----------------------------
 # FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
