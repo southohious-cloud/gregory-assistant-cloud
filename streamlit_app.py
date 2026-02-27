@@ -57,6 +57,26 @@ When performing a transformation:
 """
 
 # -----------------------------
+# Bullet Enforcement Helper
+# -----------------------------
+def enforce_bullet_points(text: str) -> str:
+    """
+    Ensures each line in Key Points or Next Steps is formatted as a bullet.
+    Removes empty lines and normalizes spacing.
+    """
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
+
+    bullet_lines = []
+    for line in lines:
+        # Avoid double bullets
+        if line.startswith("- "):
+            bullet_lines.append(line)
+        else:
+            bullet_lines.append(f"- {line}")
+
+    return "\n".join(bullet_lines)
+
+# -----------------------------
 # Formatting Wrapper
 # -----------------------------
 def format_output_with_headers(raw_output: str, mode: str) -> str:
