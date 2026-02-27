@@ -195,7 +195,92 @@ def add_transformation_buttons():
     if deeper: return "Explain deeper"
 
     return None
-    
+
+mode_instruction = {
+    "Summary": """
+You are extracting the SUMMARY section from the document.
+
+Your task:
+- Extract only the essential summary of the document.
+- Do NOT include explanation, key points, or next steps.
+- Keep the summary concise, factual, and directly tied to the document.
+- Do NOT invent content that is not present or implied.
+
+Output only the summary text with no header.
+""",
+
+    "Explanation": """
+You are extracting the EXPLANATION section from the document.
+
+Your task:
+- Explain the document’s meaning, purpose, or intent.
+- Clarify the ideas in the document using plain language.
+- Do NOT include summary, key points, or next steps.
+- Base the explanation strictly on the document’s content.
+
+Output only the explanation text with no header.
+""",
+
+    "Key Points": """
+You are extracting the KEY POINTS from the document.
+
+Your task:
+- Identify the most important ideas, facts, or statements.
+- Convert them into a clean bullet list.
+- Do NOT include summary, explanation, or next steps.
+- Do NOT invent points that are not present or implied.
+
+Output only the bullet list with no header.
+""",
+
+    "Next Steps": """
+You are extracting the NEXT STEPS from the document.
+
+Your task:
+1. Extract any explicit next steps if they exist.
+2. If the document does NOT explicitly list next steps, infer them based on:
+   - the document’s goals,
+   - the problems it describes,
+   - the key points,
+   - or any implied future actions.
+3. Always produce a clear, actionable list of next steps.
+4. Do NOT include summary, explanation, or key points.
+
+Output only the bullet list with no header.
+""",
+
+    "Everything": """
+You are extracting ALL FOUR SECTIONS from the document:
+
+1. Summary  
+2. Explanation  
+3. Key Points  
+4. Next Steps (infer if missing)
+
+Your task:
+- Produce all four sections in that exact order.
+- Each section must contain only its own content.
+- Key Points and Next Steps must be bullet lists.
+- Next Steps must be inferred if the document does not explicitly contain them.
+- Do NOT mix content between sections.
+- Do NOT add extra sections.
+
+Output format (no extra text):
+
+Summary:
+<summary>
+
+Explanation:
+<explanation>
+
+Key Points:
+<bullet list>
+
+Next Steps:
+<bullet list>
+"""
+}
+
 # -----------------------------
 # Streamlit Page Setup
 # -----------------------------
