@@ -304,6 +304,7 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
     # -----------------------------
     else:
         extracted_text = st.session_state.last_document_text
+        
     # ⭐ NEW: Mode Instruction
     MODE_INSTRUCTIONS = {
         "Summary": "Provide a concise, neutral summary of the document.",
