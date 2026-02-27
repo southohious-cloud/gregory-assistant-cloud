@@ -80,51 +80,53 @@ def enforce_bullet_points(text: str) -> str:
 
 
 # -----------------------------
-# Formatting Wrapper (Option B)
+# Formatting Wrapper (Strict Single-Mode)
 # -----------------------------
 def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
     Ensures clean, consistent section headers for all modes.
     Strips ALL model-generated headers.
+    Removes ALL extra sections in single-mode.
     Enforces bullet formatting for Key Points and Next Steps.
     """
 
     text = raw_output.strip()
 
-    headers = {
-        "Summary": ["Summary"],
-        "Explanation": ["Explanation"],
-        "Key Points": ["Key Points"],
-        "Next Steps": ["Next Steps"],
-        "Everything": ["Summary", "Explanation", "Key Points", "Next Steps"],
-    }
+    # All possible section headers the model might generate
+    all_headers = ["Summary", "Explanation", "Key Points", "Next Steps"]
 
-    expected = headers.get(mode, [])
+    # Expected header for the selected mode
+    expected = [mode]
+
+    # Normalize helper for header detection
+    def normalize_header(line: str) -> str:
+        return " ".join(line.strip().lower().replace(":", "").replace("#", "").split())
 
     # -----------------------------------------
     # SINGLE-MODE BEHAVIOR
     # -----------------------------------------
     if mode != "Everything":
-        # Trim off any later sections the model may have added
-        split_markers = ["\n### Explanation", "\n### Key Points", "\n### Next Steps"]
-        cut_index = len(text)
-        for marker in split_markers:
-            idx = text.lower().find(marker.lower())
-            if idx != -1:
-                cut_index = min(cut_index, idx)
 
-        text = text[:cut_index].strip()
+        # Split into lines
+        lines = text.split("\n")
 
-        # Remove ALL model-generated header lines (any variation)
-        cleaned_lines = []
-        for line in text.split("\n"):
-            stripped = line.strip().lower().replace(":", "").replace("#", "")
-            stripped = " ".join(stripped.split())  # normalize double spaces
-            if stripped in [h.lower() for h in expected]:
+        # Remove ALL model-generated headers AND stop when a new section begins
+        cleaned = []
+        for line in lines:
+            norm = normalize_header(line)
+
+            # If this line is ANY section header (Summary, Explanation, Key Points, Next Steps)
+            # AND it is NOT the selected mode → STOP (cut off extra sections)
+            if norm in [h.lower() for h in all_headers] and norm != mode.lower():
+                break
+
+            # If this line is the header for the selected mode → skip it
+            if norm == mode.lower():
                 continue
-            cleaned_lines.append(line)
 
-        text = "\n".join(cleaned_lines).strip()
+            cleaned.append(line)
+
+        text = "\n".join(cleaned).strip()
 
         # Add our clean header
         text = f"### {mode}\n\n{text}"
@@ -139,17 +141,16 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # EVERYTHING MODE
     # -----------------------------------------
     parts = text.split("\n\n")
-    cleaned = []
+    cleaned_sections = []
 
-    for header, content in zip(expected, parts):
+    for header, content in zip(all_headers, parts):
         content = content.strip()
 
         # Remove ALL model-generated header lines inside each section
         lines = []
         for line in content.split("\n"):
-            stripped = line.strip().lower().replace(":", "").replace("#", "")
-            stripped = " ".join(stripped.split())
-            if stripped in [h.lower() for h in expected]:
+            norm = normalize_header(line)
+            if norm in [h.lower() for h in all_headers]:
                 continue
             lines.append(line)
 
@@ -159,9 +160,9 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         if header in ["Key Points", "Next Steps"]:
             content = enforce_bullet_points(content)
 
-        cleaned.append(f"### {header}\n\n{content}")
+        cleaned_sections.append(f"### {header}\n\n{content}")
 
-    return "\n\n".join(cleaned)
+    return "\n\n".join(cleaned_sections)
 
 
 # -----------------------------
