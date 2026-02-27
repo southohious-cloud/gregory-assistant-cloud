@@ -57,7 +57,7 @@ When performing a transformation:
 """
 
 # -----------------------------
-# Bullet Enforcement Helper
+# Bullet Normalizer
 # -----------------------------
 def enforce_bullet_points(text: str) -> str:
     """
@@ -70,24 +70,23 @@ def enforce_bullet_points(text: str) -> str:
 
     bullet_lines = []
     for line in lines:
-        # Remove any leading bullet symbol + space
         cleaned = line
         for sym in bullet_symbols:
             if cleaned.startswith(sym):
                 cleaned = cleaned[len(sym):].strip()
-        # Add a single consistent bullet
         bullet_lines.append(f"- {cleaned}")
 
     return "\n".join(bullet_lines)
 
+
 # -----------------------------
-# Formatting Wrapper
+# Formatting Wrapper (Option B)
 # -----------------------------
 def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
     Ensures clean, consistent section headers for all modes.
-    Also enforces bullet formatting for Key Points and Next Steps.
-    For non-Everything modes, it aggressively trims extra sections.
+    Strips ALL model-generated headers.
+    Enforces bullet formatting for Key Points and Next Steps.
     """
 
     text = raw_output.strip()
@@ -116,13 +115,15 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         text = text[:cut_index].strip()
 
-        # Remove ALL model-generated header lines
+        # Remove ALL model-generated header lines (any variation)
         cleaned_lines = []
         for line in text.split("\n"):
-            stripped = line.strip().lower().replace(":", "")
+            stripped = line.strip().lower().replace(":", "").replace("#", "")
+            stripped = " ".join(stripped.split())  # normalize double spaces
             if stripped in [h.lower() for h in expected]:
-                continue  # skip model headers entirely
+                continue
             cleaned_lines.append(line)
+
         text = "\n".join(cleaned_lines).strip()
 
         # Add our clean header
@@ -146,10 +147,12 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         # Remove ALL model-generated header lines inside each section
         lines = []
         for line in content.split("\n"):
-            stripped = line.strip().lower().replace(":", "")
+            stripped = line.strip().lower().replace(":", "").replace("#", "")
+            stripped = " ".join(stripped.split())
             if stripped in [h.lower() for h in expected]:
                 continue
             lines.append(line)
+
         content = "\n".join(lines).strip()
 
         # Bullet enforcement for Key Points + Next Steps
