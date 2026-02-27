@@ -1,3 +1,21 @@
+# -----------------------------
+# Initialize session state
+# -----------------------------
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+if "display_history" not in st.session_state:
+    st.session_state.display_history = []
+
+if "last_document_text" not in st.session_state:
+    st.session_state.last_document_text = None
+
+if "last_document_name" not in st.session_state:
+    st.session_state.last_document_name = None
+
+if "last_document_summary" not in st.session_state:
+    st.session_state.last_document_summary = None
+    
 import os
 import streamlit as st
 from groq import Groq
