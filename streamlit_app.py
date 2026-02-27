@@ -102,9 +102,11 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
     expected = headers.get(mode, [])
 
-    # 🔹 Single-mode behavior: force ONLY that section
+    # -----------------------------------------
+    # SINGLE-MODE BEHAVIOR
+    # -----------------------------------------
     if mode != "Everything":
-        # If the model returned multiple sections, keep only the first chunk
+        # Trim off any later sections the model may have added
         split_markers = ["\n### Explanation", "\n### Key Points", "\n### Next Steps"]
         cut_index = len(text)
         for marker in split_markers:
@@ -114,32 +116,43 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         text = text[:cut_index].strip()
 
-        # 🔹 Improved header detection to avoid duplicates
-        header_present = any(
-            text.strip().lower().startswith(f"### {h.lower()}")
-            or text.strip().lower().startswith(f"{h.lower()}:")
-            or text.strip().lower().startswith(h.lower())
-            for h in expected
-        )
+        # Remove ALL model-generated header lines
+        cleaned_lines = []
+        for line in text.split("\n"):
+            stripped = line.strip().lower().replace(":", "")
+            if stripped in [h.lower() for h in expected]:
+                continue  # skip model headers entirely
+            cleaned_lines.append(line)
+        text = "\n".join(cleaned_lines).strip()
 
-        if not header_present:
-            text = f"### {mode}\n\n{text}"
+        # Add our clean header
+        text = f"### {mode}\n\n{text}"
 
-        # Enforce bullets for specific modes
+        # Bullet enforcement for Key Points + Next Steps
         if mode in ["Key Points", "Next Steps"]:
-            body = enforce_bullet_points(text)
-            return body
+            return enforce_bullet_points(text)
 
         return text
 
-    # 🔹 Everything mode → split into four sections
+    # -----------------------------------------
+    # EVERYTHING MODE
+    # -----------------------------------------
     parts = text.split("\n\n")
     cleaned = []
 
     for header, content in zip(expected, parts):
         content = content.strip()
 
-        # Enforce bullets for Key Points + Next Steps
+        # Remove ALL model-generated header lines inside each section
+        lines = []
+        for line in content.split("\n"):
+            stripped = line.strip().lower().replace(":", "")
+            if stripped in [h.lower() for h in expected]:
+                continue
+            lines.append(line)
+        content = "\n".join(lines).strip()
+
+        # Bullet enforcement for Key Points + Next Steps
         if header in ["Key Points", "Next Steps"]:
             content = enforce_bullet_points(content)
 
