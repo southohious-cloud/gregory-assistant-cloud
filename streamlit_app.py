@@ -390,6 +390,7 @@ def render_collapsible_history(history):
                 st.markdown(f"**User:**\n\n{user_msg}")
             if assistant_msg:
                 st.markdown(f"**Assistant:**\n\n{assistant_msg}")
+                
 # -----------------------------
 # FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
