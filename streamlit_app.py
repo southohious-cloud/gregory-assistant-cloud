@@ -455,30 +455,32 @@ instruction = mode_instruction[st.session_state.processing_mode]
 # -----------------------------
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
-    {"role": "system", "content": instruction},   # ✔ correct: selected instruction string
-    {"role": "user", "content": extracted_text}   # ✔ correct: document text
+    {"role": "system", "content": instruction},
+    {"role": "user", "content": extracted_text}
 ]
 
-    # ⭐ Groq call
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=messages,
-    )
+# -----------------------------
+# Groq call
+# -----------------------------
+response = client.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=messages,
+)
 
-    raw_output = response.choices[0].message.content
+raw_output = response.choices[0].message.content
 
-    # ⭐ Clean, consistent section headers
-    output = format_output_with_headers(raw_output, st.session_state.processing_mode)
+# Clean, consistent section headers
+output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
-    # Store document context
-    st.session_state.last_document_text = extracted_text
-    st.session_state.last_document_name = uploaded_file.name
-    st.session_state.last_document_summary = output
+# Store document context
+st.session_state.last_document_text = extracted_text
+st.session_state.last_document_name = st.session_state.last_document_name
+st.session_state.last_document_summary = output
 
-    # Display output
-    doc_header = f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}"
-    st.session_state.display_history.append(("", doc_header))
-    st.session_state.display_history.append(("", output))
+# Display output
+doc_header = f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}"
+st.session_state.display_history.append(("", doc_header))
+st.session_state.display_history.append(("", output))
     
 # ⭐ NEW: Post-output transformation buttons
 action = add_transformation_buttons()
