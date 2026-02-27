@@ -198,22 +198,19 @@ with st.sidebar:
     
     st.write("Status: **Online**")
 
-    # ⭐ NEW: Mode Selector
-    st.markdown("### Document Processing Mode")
-    processing_mode = st.radio(
-        "Choose how I should process uploaded documents:",
-        [
-            "Summary",
-            "Explanation",
-            "Key Points",
-            "Next Steps",
-            "Everything"
-        ],
-        index=0
-    )
-
-    # ⭐ FIX: Store the selected mode so the rest of the app uses it
-    st.session_state.processing_mode = processing_mode
+    # ⭐ NEW: Mode Selector (CORRECTED)
+st.markdown("### Document Processing Mode")
+processing_mode = st.radio(
+    "Choose how I should process uploaded documents:",
+    [
+        "Summary",
+        "Explanation",
+        "Key Points",
+        "Next Steps",
+        "Everything"
+    ],
+    key="processing_mode"
+)
 
     if st.button("Reset Conversation"):
         st.session_state.messages = [
