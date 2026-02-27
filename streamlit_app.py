@@ -312,32 +312,8 @@ if uploaded_file is not None:
     elif file_type.startswith("image/"):
         extracted_text = "(Image text extraction is not available in this cloud version.)"
 
-   # ⭐ NEW: Mode Instruction
-mode_instruction = {
-    "Summary": "Provide a concise, neutral summary of the document.",
-    "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
-    "Key Points": "Extract the most important key points from the document.",
-    "Next Steps": "Suggest reasonable next steps based on the document, without giving medical, legal, or financial advice.",
-    "Everything": (
-        "Provide all four sections in this order:\n"
-        "1. Summary\n"
-        "2. Explanation\n"
-        "3. Key Points\n"
-        "4. Next Steps"
-    )
-}
-
-    # ⭐ NEW: Groq call using selected mode
-extracted_text = extract_text(uploaded_file)
-
-messages = [
-    {"role": "system", "content": SYSTEM_PROMPT},
-    {"role": "system", "content": mode_instruction},
-    {"role": "user", "content": extracted_text}
-]
-
     # ⭐ NEW: Mode Instruction
-MODE_INSTRUCTIONS = {
+    MODE_INSTRUCTIONS = {
         "Summary": "Provide a concise, neutral summary of the document.",
         "Explanation": "Explain the document in plain language, focusing on meaning and clarity.",
         "Key Points": "Extract the most important key points from the document.",
@@ -351,36 +327,35 @@ MODE_INSTRUCTIONS = {
         )
     }
 
-    # ⭐ Select correct instruction
-mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
+    mode_instruction = MODE_INSTRUCTIONS[st.session_state.processing_mode]
 
-    # ⭐ NEW: Groq call using selected mode
-messages = [
+    # ⭐ Build messages
+    messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "system", "content": mode_instruction},
         {"role": "user", "content": extracted_text}
     ]
 
-response = client.chat.completions.create(
-    model="llama-3.3-70b-versatile",
-    messages=messages,
+    # ⭐ Groq call
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
     )
 
-raw_output = response.choices[0].message.content
+    raw_output = response.choices[0].message.content
 
-    # ⭐ NEW: Clean, consistent section headers
-output = format_output_with_headers(raw_output, st.session_state.processing_mode)
+    # ⭐ Clean, consistent section headers
+    output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
     # Store document context
-st.session_state.last_document_text = extracted_text
-st.session_state.last_document_name = uploaded_file.name
-st.session_state.last_document_summary = output
+    st.session_state.last_document_text = extracted_text
+    st.session_state.last_document_name = uploaded_file.name
+    st.session_state.last_document_summary = output
 
     # Display output
-doc_header = f"### {st.session_state.processing_mode}: {uploaded_file.name}"
-st.session_state.display_history.append(("", doc_header))
-st.session_state.display_history.append(("", output))
-
+    doc_header = f"### {st.session_state.processing_mode}: {uploaded_file.name}"
+    st.session_state.display_history.append(("", doc_header))
+    st.session_state.display_history.append(("", output))
 # ⭐ NEW: Post-output transformation buttons
 action = add_transformation_buttons()
 
