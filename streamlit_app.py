@@ -199,18 +199,18 @@ with st.sidebar:
     st.write("Status: **Online**")
 
     # ⭐ NEW: Mode Selector (CORRECTED)
-st.markdown("### Document Processing Mode")
-processing_mode = st.radio(
-    "Choose how I should process uploaded documents:",
-    [
-        "Summary",
-        "Explanation",
-        "Key Points",
-        "Next Steps",
-        "Everything"
-    ],
-    key="processing_mode"
-)
+    st.markdown("### Document Processing Mode")
+    processing_mode = st.radio(
+        "Choose how I should process uploaded documents:",
+        [
+            "Summary",
+            "Explanation",
+            "Key Points",
+            "Next Steps",
+            "Everything"
+        ],
+        key="processing_mode"
+    )
 
     if st.button("Reset Conversation"):
         st.session_state.messages = [
@@ -223,7 +223,7 @@ processing_mode = st.radio(
         st.session_state.last_document_text = None
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
-        st.rerun
+        st.rerun()
         
 # -----------------------------
 # Session State Initialization
