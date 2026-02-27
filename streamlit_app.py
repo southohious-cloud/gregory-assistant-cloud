@@ -252,37 +252,58 @@ if "last_document_summary" not in st.session_state:
     st.session_state.last_document_summary = None
 
 # -----------------------------
-# FILE UPLOAD (INSIDE CHAT AREA)
+# FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
+
+# Detect mode change
+if "last_mode" not in st.session_state:
+    st.session_state.last_mode = processing_mode
+
+mode_changed = processing_mode != st.session_state.last_mode
+st.session_state.last_mode = processing_mode
+
 uploaded_file = st.file_uploader(
     "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
     type=["pdf", "txt", "png", "jpg", "jpeg"],
     label_visibility="visible"
 )
 
-if uploaded_file is not None:
-    # File notice
-    file_notice = f"📄 File received: **{uploaded_file.name}**"
-    st.session_state.display_history.append(("", file_notice))
+# Trigger processing if:
+# 1. A new file is uploaded
+# 2. OR the mode changed AND we have a previous document
+if uploaded_file is not None or (mode_changed and st.session_state.last_document_text):
 
-    file_type = uploaded_file.type
-    extracted_text = ""
+    # -----------------------------
+    # CASE 1 — New file uploaded
+    # -----------------------------
+    if uploaded_file is not None:
+        file_notice = f"📄 File received: **{uploaded_file.name}**"
+        st.session_state.display_history.append(("", file_notice))
 
-    # --- TXT ---
-    if file_type == "text/plain":
-        extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
+        file_type = uploaded_file.type
 
-    # --- PDF ---
-    elif file_type == "application/pdf":
-        with pdfplumber.open(uploaded_file) as pdf:
-            extracted_text = "\n".join(
-                page.extract_text() or "" for page in pdf.pages
-            )
+        # Extract text normally
+        if file_type == "text/plain":
+            extracted_text = uploaded_file.read().decode("utf-8", errors="ignore")
 
-    # --- IMAGES (no OCR in cloud version) ---
-    elif file_type.startswith("image/"):
-        extracted_text = "(Image text extraction is not available in this cloud version.)"
+        elif file_type == "application/pdf":
+            with pdfplumber.open(uploaded_file) as pdf:
+                extracted_text = "\n".join(
+                    page.extract_text() or "" for page in pdf.pages
+                )
 
+        elif file_type.startswith("image/"):
+            extracted_text = "(Image text extraction is not available in this cloud version.)"
+
+        # Save for auto-reprocessing
+        st.session_state.last_document_text = extracted_text
+        st.session_state.last_document_name = uploaded_file.name
+
+    # -----------------------------
+    # CASE 2 — Mode changed, no new file
+    # -----------------------------
+    else:
+        extracted_text = st.session_state.last_document_text
     # ⭐ NEW: Mode Instruction
     MODE_INSTRUCTIONS = {
         "Summary": "Provide a concise, neutral summary of the document.",
