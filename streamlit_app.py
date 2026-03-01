@@ -415,7 +415,8 @@ with st.sidebar:
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
         st.rerun()
-        # -----------------------------
+        
+# -----------------------------
 # Groq Chat Function
 # -----------------------------
 def call_groq(messages):
