@@ -476,7 +476,7 @@ uploaded_file = st.file_uploader(
 # 1. A new file is uploaded
 # 2. OR we already have a previous document stored
 if uploaded_file is not None or st.session_state.get("last_document_text"):
-    
+
     # -----------------------------
     # CASE 1 — New file uploaded
     # -----------------------------
@@ -548,7 +548,6 @@ if uploaded_file is not None or st.session_state.get("last_document_text"):
             """,
             unsafe_allow_html=True
         )
-
 # -----------------------------
 # ⭐ NEW: Post-output transformation buttons
 # -----------------------------
