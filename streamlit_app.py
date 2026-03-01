@@ -388,7 +388,7 @@ with st.sidebar:
         key="processing_mode"
     )
 
-       if st.button("Reset Conversation"):
+    if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "assistant", "content": "Online and ready. What would you like to do?"}
@@ -402,7 +402,7 @@ with st.sidebar:
         st.rerun()
 
 # File uploader MUST be inside the sidebar
-    uploaded_file = st.file_uploader(
+uploaded_file = st.file_uploader(
        "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
         type=["pdf", "txt", "png", "jpg", "jpeg"],
         label_visibility="visible"
