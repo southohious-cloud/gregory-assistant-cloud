@@ -513,8 +513,15 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
     # DISPLAY ONLY THE CURRENT OUTPUT (INSTANT REPLACEMENT)
     # -----------------------------
     with output_container:
-        st.markdown(f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}")
-        st.markdown(output)
+        st.markdown(
+            f"""
+            <div class='output-panel'>
+                <h3>{st.session_state.processing_mode}: {st.session_state.last_document_name}</h3>
+                {output}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 # -----------------------------
@@ -543,8 +550,15 @@ if action:
 
     # Replace output directly
     with output_container:
-        st.markdown(f"### {action}")
-        st.markdown(transformed)
+        st.markdown(
+            f"""
+            <div class='output-panel'>
+                <h3>{action}</h3>
+                {transformed}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     st.session_state.last_document_summary = transformed
     st.rerun()
