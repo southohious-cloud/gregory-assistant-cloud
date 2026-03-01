@@ -132,14 +132,14 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned = cleaned.replace(":", "").replace("#", "")
         return " ".join(cleaned.split())
 
-    # -----------------------------
-    # GLOBAL CLEANUP FOR ALL MODES
-    # -----------------------------
-    # Remove accidental leading headers ONLY in single-mode
-        if mode != "Everything":
-            for h in all_headers:
-                if text.lower().startswith(h.lower()):
-                    text = text[len(h):].lstrip(":").strip()
+   # -----------------------------
+# GLOBAL CLEANUP FOR ALL MODES
+# -----------------------------
+# Remove accidental leading headers ONLY in single-mode
+    if mode != "Everything":
+        for h in all_headers:
+            if text.lower().startswith(h.lower()):
+                text = text[len(h):].lstrip(":").strip()
             
     # Normalize whitespace
     while "\n\n\n" in text:
