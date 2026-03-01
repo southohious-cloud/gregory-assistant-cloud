@@ -411,9 +411,7 @@ with st.sidebar:
 # OUTPUT CONTAINER (main page)
 # -----------------------------
 output_container = st.container()
-    
-    i
-        
+      
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
