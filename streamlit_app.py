@@ -450,12 +450,6 @@ if "last_mode" not in st.session_state:
 mode_changed = processing_mode != st.session_state.last_mode
 st.session_state.last_mode = processing_mode
 
-uploaded_file = st.file_uploader(
-    "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
-    type=["pdf", "txt", "png", "jpg", "jpeg"],
-    label_visibility="visible"
-)
-
 # Trigger processing if:
 # 1. A new file is uploaded
 # 2. OR we already have a previous document stored
