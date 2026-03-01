@@ -10,7 +10,7 @@ import pdfplumber
 st.markdown("""
 <style>
 .output-panel {
-    height: 550px;
+    height: 450px;
     overflow-y: auto;
     padding: 1rem;
     border: 1px solid #ccc;
