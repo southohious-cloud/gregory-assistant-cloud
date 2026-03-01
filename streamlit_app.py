@@ -191,7 +191,8 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # -----------------------------
     # EVERYTHING MODE
     # -----------------------------
-    parts = text.split("\n\n")
+    import re
+    parts = re.split(r"\n\s*\n", text)
     cleaned_sections = []
 
     for header, content in zip(all_headers, parts):
