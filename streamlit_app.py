@@ -128,7 +128,9 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
     # Normalize helper for header detection
     def normalize_header(line: str) -> str:
-        return " ".join(line.strip().lower().replace(":", "").replace("#", "").split())
+        cleaned = line.strip().lower()
+        cleaned = cleaned.replace(":", "").replace("#", "")
+        return " ".join(cleaned.split())
 
     # -----------------------------
     # GLOBAL CLEANUP FOR ALL MODES
@@ -136,7 +138,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # Remove accidental leading headers
     for h in all_headers:
         if text.lower().startswith(h.lower()):
-            text = text[len(h):].strip()
+            text = text[len(h):].lstrip(":").strip()
 
     # Normalize whitespace
     while "\n\n\n" in text:
@@ -158,7 +160,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # -----------------------------
     if mode != "Everything":
 
-        # Split into lines
         lines = text.split("\n")
         cleaned = []
 
@@ -166,7 +167,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
             norm = normalize_header(line)
 
             # If this line is ANY section header that is NOT the selected mode → STOP
-            if norm in [h.lower() for h in all_headers] and norm != mode.lower():
+            if any(norm == h.lower() for h in all_headers) and norm != mode.lower():
                 break
 
             # Skip header for the selected mode
@@ -177,16 +178,11 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         text = "\n".join(cleaned).strip()
 
-        # -----------------------------
         # Mode-specific enforcement
-        # -----------------------------
         if mode in ["Summary", "Explanation"]:
-            # Must be a single paragraph
-            text = text.replace("\n", " ").strip()
-            return text
+            return text.replace("\n", " ").strip()
 
         if mode in ["Key Points", "Next Steps"]:
-            # Must be bullets only
             bullets = [l for l in text.split("\n") if l.startswith("- ")]
             return "\n".join(bullets).strip()
 
@@ -195,7 +191,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # -----------------------------
     # EVERYTHING MODE
     # -----------------------------
-    # Split into sections (model usually separates with blank lines)
     parts = text.split("\n\n")
     cleaned_sections = []
 
@@ -206,11 +201,17 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         lines = []
         for line in content.split("\n"):
             norm = normalize_header(line)
-            if norm in [h.lower() for h in all_headers]:
+
+            # Stronger header stripping: remove any header-like line
+            if any(norm.startswith(h.lower()) for h in all_headers):
                 continue
+
             lines.append(line)
 
         content = "\n".join(lines).strip()
+
+        # Remove stray leading punctuation (fixes the ":" issue)
+        content = content.lstrip(":").strip()
 
         # Bullet enforcement for Key Points + Next Steps
         if header in ["Key Points", "Next Steps"]:
@@ -220,8 +221,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned_sections.append(f"### {header}\n\n{content}")
 
     return "\n\n".join(cleaned_sections).strip()
-
-
 
 mode_instruction = {
     "Summary": """
