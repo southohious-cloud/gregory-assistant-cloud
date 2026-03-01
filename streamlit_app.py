@@ -159,7 +159,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # SINGLE-MODE BEHAVIOR
     # -----------------------------
     if mode != "Everything":
-
         lines = text.split("\n")
         cleaned = []
 
@@ -188,8 +187,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         return text
 
-def format_output_with_headers(raw_output: str, mode: str) -> str:
-    ...
     # -----------------------------
     # EVERYTHING MODE
     # -----------------------------
@@ -212,7 +209,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         # Remove stray leading punctuation
         content = content.lstrip(":").strip()
 
-        # Second-pass header stripping
+        # Second-pass header stripping (handles model headers after blank lines)
         content_lines = []
         for line in content.split("\n"):
             norm = normalize_header(line)
@@ -221,7 +218,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
             content_lines.append(line)
         content = "\n".join(content_lines).strip()
 
-        # Bullet enforcement
+        # Bullet enforcement for Key Points + Next Steps
         if header in ["Key Points", "Next Steps"]:
             bullets = [l for l in content.split("\n") if l.startswith("- ")]
             content = "\n".join(bullets).strip()
