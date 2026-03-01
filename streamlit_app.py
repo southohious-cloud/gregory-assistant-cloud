@@ -188,49 +188,47 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         return text
 
-# -----------------------------
-# EVERYTHING MODE
-# -----------------------------
-import re
-parts = re.split(r"\n\s*\n", text)
-cleaned_sections = []
+def format_output_with_headers(raw_output: str, mode: str) -> str:
+    ...
+    # -----------------------------
+    # EVERYTHING MODE
+    # -----------------------------
+    import re
+    parts = re.split(r"\n\s*\n", text)
+    cleaned_sections = []
 
-for header, content in zip(all_headers, parts):
-    content = content.strip()
+    for header, content in zip(all_headers, parts):
+        content = content.strip()
 
-    # Remove ALL model-generated header lines inside each section
-    lines = []
-    for line in content.split("\n"):
-        norm = normalize_header(line)
+        # Remove ALL model-generated header lines inside each section
+        lines = []
+        for line in content.split("\n"):
+            norm = normalize_header(line)
+            if any(norm.startswith(h.lower()) for h in all_headers):
+                continue
+            lines.append(line)
+        content = "\n".join(lines).strip()
 
-        # Stronger header stripping: remove any header-like line
-        if any(norm.startswith(h.lower()) for h in all_headers):
-            continue
+        # Remove stray leading punctuation
+        content = content.lstrip(":").strip()
 
-        lines.append(line)
+        # Second-pass header stripping
+        content_lines = []
+        for line in content.split("\n"):
+            norm = normalize_header(line)
+            if any(norm == h.lower() for h in all_headers):
+                continue
+            content_lines.append(line)
+        content = "\n".join(content_lines).strip()
 
-    content = "\n".join(lines).strip()
+        # Bullet enforcement
+        if header in ["Key Points", "Next Steps"]:
+            bullets = [l for l in content.split("\n") if l.startswith("- ")]
+            content = "\n".join(bullets).strip()
 
-    # Remove stray leading punctuation (fixes the ":" issue)
-    content = content.lstrip(":").strip()
+        cleaned_sections.append(f"### {header}\n\n{content}")
 
-    # Second-pass header stripping (handles model headers after blank lines)
-    content_lines = []
-    for line in content.split("\n"):
-        norm = normalize_header(line)
-        if any(norm == h.lower() for h in all_headers):
-            continue
-        content_lines.append(line)
-    content = "\n".join(content_lines).strip()
-
-    # Bullet enforcement for Key Points + Next Steps
-    if header in ["Key Points", "Next Steps"]:
-        bullets = [l for l in content.split("\n") if l.startswith("- ")]
-        content = "\n".join(bullets).strip()
-
-    cleaned_sections.append(f"### {header}\n\n{content}")
-
-return "\n\n".join(cleaned_sections).strip()
+    return "\n\n".join(cleaned_sections).strip()
 
 mode_instruction = {
     "Summary": """
