@@ -431,13 +431,6 @@ def call_groq(messages):
 def render_collapsible_history(history):
     return  # History disabled
 
-
-# -----------------------------
-# OUTPUT CONTAINER FOR INSTANT REPLACEMENT
-# -----------------------------
-output_container = st.container()
-
-
 # -----------------------------
 # FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
