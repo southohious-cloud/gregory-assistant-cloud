@@ -188,7 +188,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         return text
 
-    # -----------------------------
+# -----------------------------
 # EVERYTHING MODE
 # -----------------------------
 import re
