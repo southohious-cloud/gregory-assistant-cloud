@@ -401,7 +401,9 @@ with st.sidebar:
         st.session_state.last_document_summary = None
         st.rerun()
 
-# File uploader MUST be inside the sidebar
+# -----------------------------
+# File uploader (MAIN PAGE)
+# -----------------------------
 uploaded_file = st.file_uploader(
     "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
     type=["pdf", "txt", "png", "jpg", "jpeg"],
