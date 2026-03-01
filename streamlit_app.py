@@ -20,31 +20,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------------------------------
-# Scroll reset on every rerun (content-aware)
-# ----------------------------------------
-st.markdown("""
-<script>
-function resetWhenReady() {
-    const panel = document.querySelector('.output-panel');
-    if (!panel) {
-        setTimeout(resetWhenReady, 30);
-        return;
-    }
 
-    // Wait until content is actually inside the panel
-    if (panel.innerText.trim().length < 10) {
-        setTimeout(resetWhenReady, 30);
-        return;
-    }
-
-    // Now safe to reset scroll
-    panel.scrollTop = 0;
-}
-
-resetWhenReady();
-</script>
-""", unsafe_allow_html=True)
 
 # -----------------------------
 # Initialize session state
@@ -587,9 +563,6 @@ if action:
     st.session_state.last_document_summary = transformed
     st.rerun()
 
-
-
-
 # -----------------------------
 # Chat Input (kept functional)
 # -----------------------------
@@ -626,6 +599,31 @@ if user_input:
 
     st.markdown(assistant_reply)
 
+# ----------------------------------------
+# Scroll reset on every rerun (content-aware)
+# ----------------------------------------
+st.markdown("""
+<script>
+function resetWhenReady() {
+    const panel = document.querySelector('.output-panel');
+    if (!panel) {
+        setTimeout(resetWhenReady, 30);
+        return;
+    }
+
+    // Wait until content is actually inside the panel
+    if (panel.innerText.trim().length < 10) {
+        setTimeout(resetWhenReady, 30);
+        return;
+    }
+
+    // Now safe to reset scroll
+    panel.scrollTop = 0;
+}
+
+resetWhenReady();
+</script>
+""", unsafe_allow_html=True)
 
 # -----------------------------
 # Footer
