@@ -214,14 +214,22 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         # Remove stray leading punctuation (fixes the ":" issue)
         content = content.lstrip(":").strip()
 
-        # Bullet enforcement for Key Points + Next Steps
-        if header in ["Key Points", "Next Steps"]:
-            bullets = [l for l in content.split("\n") if l.startswith("- ")]
-            content = "\n".join(bullets).strip()
 
-        cleaned_sections.append(f"### {header}\n\n{content}")
+# Second-pass header stripping (handles model headers after blank lines)
+content_lines = []
+for line in content.split("\n"):
+    norm = normalize_header(line)
+    if any(norm == h.lower() for h in all_headers):
+        continue
+    content_lines.append(line)
+content = "\n".join(content_lines).strip()
 
-    return "\n\n".join(cleaned_sections).strip()
+# Bullet enforcement for Key Points + Next Steps
+if header in ["Key Points", "Next Steps"]:
+    bullets = [l for l in content.split("\n") if l.startswith("- ")]
+    content = "\n".join(bullets).strip()
+
+cleaned_sections.append(f"### {header}\n\n{content}")
 
 mode_instruction = {
     "Summary": """
