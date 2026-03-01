@@ -487,44 +487,6 @@ if uploaded_file is not None or st.session_state.get("last_document_text"):
             """,
             unsafe_allow_html=True
         )
-# -----------------------------
-# ⭐ NEW: Post-output transformation buttons
-# -----------------------------
-action = add_transformation_buttons()
-
-if action:
-    transform_instruction = (
-        f"Transform the previous output using this instruction: {action}. "
-        f"Do not add new information."
-    )
-
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "system", "content": transform_instruction},
-        {"role": "user", "content": st.session_state.last_document_summary},
-    ]
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=messages,
-    )
-
-    transformed = response.choices[0].message.content
-
-    # Replace output directly
-    with output_container:
-        st.markdown(
-            f"""
-            <div class='output-panel'>
-                <h3>{action}</h3>
-                {transformed}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.session_state.last_document_summary = transformed
-    st.rerun()
 
 # -----------------------------
 # Chat Input (kept functional)
