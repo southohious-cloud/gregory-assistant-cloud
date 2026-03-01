@@ -21,25 +21,30 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ----------------------------------------
-# Scroll reset on every rerun (final fix)
+# Scroll reset on every rerun (content-aware)
 # ----------------------------------------
 st.markdown("""
 <script>
-function waitForPanel() {
+function resetWhenReady() {
     const panel = document.querySelector('.output-panel');
-    if (panel) {
-        panel.scrollTop = 0;
-    } else {
-        // Keep checking every 30ms until the panel exists
-        setTimeout(waitForPanel, 30);
+    if (!panel) {
+        setTimeout(resetWhenReady, 30);
+        return;
     }
+
+    // Wait until content is actually inside the panel
+    if (panel.innerText.trim().length < 10) {
+        setTimeout(resetWhenReady, 30);
+        return;
+    }
+
+    // Now safe to reset scroll
+    panel.scrollTop = 0;
 }
 
-// Start checking immediately
-waitForPanel();
+resetWhenReady();
 </script>
 """, unsafe_allow_html=True)
-
 # -----------------------------
 # Initialize session state
 # -----------------------------
