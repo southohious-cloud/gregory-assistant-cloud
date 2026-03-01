@@ -395,6 +395,15 @@ with st.sidebar:
         key="processing_mode"
     )
 
+    # -----------------------------
+    # File uploader MUST be inside the sidebar
+    # -----------------------------
+    uploaded_file = st.file_uploader(
+        "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
+        type=["pdf", "txt", "png", "jpg", "jpeg"],
+        label_visibility="visible"
+    )
+
     if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -407,8 +416,7 @@ with st.sidebar:
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
         st.rerun()
-
-# -----------------------------
+        # -----------------------------
 # Groq Chat Function
 # -----------------------------
 def call_groq(messages):
