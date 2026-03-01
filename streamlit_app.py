@@ -45,6 +45,7 @@ function resetWhenReady() {
 resetWhenReady();
 </script>
 """, unsafe_allow_html=True)
+
 # -----------------------------
 # Initialize session state
 # -----------------------------
