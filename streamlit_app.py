@@ -394,7 +394,7 @@ with st.sidebar:
         type=["pdf", "txt", "png", "jpg", "jpeg"],
         label_visibility="visible"
     )
-if st.button("Reset Conversation"):
+    if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "assistant", "content": "Online and ready. What would you like to do?"}
