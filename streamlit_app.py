@@ -372,7 +372,6 @@ if "last_document_summary" not in st.session_state:
 if "processing_mode" not in st.session_state:
     st.session_state.processing_mode = "Summary"
 
-
 # -----------------------------
 # Sidebar
 # -----------------------------
