@@ -230,7 +230,7 @@ for header, content in zip(all_headers, parts):
 
     cleaned_sections.append(f"### {header}\n\n{content}")
 
-    return "\n\n".join(cleaned_sections).strip()
+return "\n\n".join(cleaned_sections).strip()
 
 mode_instruction = {
     "Summary": """
