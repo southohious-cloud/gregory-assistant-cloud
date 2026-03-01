@@ -402,34 +402,12 @@ def call_groq(messages):
 
 
 # -----------------------------
-# Collapsible History Renderer
+# REMOVE HISTORY COMPLETELY
 # -----------------------------
 def render_collapsible_history(history):
-    """
-    Renders chat history using collapsible sections to prevent clutter.
-    The most recent assistant message is shown fully.
-    Older messages are collapsed.
-    """
-    if not history:
-        return
+    return  # History disabled
 
-    # Show the last message fully
-    last_user, last_assistant = history[-1]
-    if last_user:
-        with st.chat_message("user"):
-            st.markdown(last_user)
-    if last_assistant:
-        with st.chat_message("assistant"):
-            st.markdown(last_assistant)
 
-    # Render older messages collapsed
-    for user_msg, assistant_msg in history[:-1]:
-        with st.expander("Previous Output", expanded=False):
-            if user_msg:
-                st.markdown(f"**User:**\n\n{user_msg}")
-            if assistant_msg:
-                st.markdown(f"**Assistant:**\n\n{assistant_msg}")
-                
 # -----------------------------
 # FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
@@ -456,9 +434,6 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
     # CASE 1 — New file uploaded
     # -----------------------------
     if uploaded_file is not None:
-        file_notice = f"📄 File received: **{uploaded_file.name}**"
-        st.session_state.display_history.append(("", file_notice))
-
         file_type = uploaded_file.type
 
         # Extract text normally
@@ -507,19 +482,22 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
     )
 
     raw_output = response.choices[0].message.content
-
     output = format_output_with_headers(raw_output, st.session_state.processing_mode)
 
     # Store document context
     st.session_state.last_document_text = extracted_text
     st.session_state.last_document_summary = output
 
-    # Display output
-    doc_header = f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}"
-    st.session_state.display_history.append(("", doc_header))
-    st.session_state.display_history.append(("", output))
-    
+    # -----------------------------
+    # DISPLAY ONLY THE CURRENT OUTPUT
+    # -----------------------------
+    st.markdown(f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}")
+    st.markdown(output)
+
+
+# -----------------------------
 # ⭐ NEW: Post-output transformation buttons
+# -----------------------------
 action = add_transformation_buttons()
 
 if action:
@@ -541,27 +519,20 @@ if action:
 
     transformed = response.choices[0].message.content
 
-    # Display transformed output
-    st.session_state.display_history.append(("", f"### {action}"))
-    st.session_state.display_history.append(("", transformed))
-    st.session_state.messages.append({"role": "assistant", "content": transformed})
+    # Replace output directly
+    st.markdown(f"### {action}")
+    st.markdown(transformed)
 
+    st.session_state.last_document_summary = transformed
     st.rerun()
 
-# -----------------------------
-# Display Chat History (Collapsible)
-# -----------------------------
-render_collapsible_history(st.session_state.display_history)
 
 # -----------------------------
-# Chat Input
+# Chat Input (kept functional)
 # -----------------------------
 user_input = st.chat_input("Type your message...")
 
 if user_input:
-    with st.chat_message("user"):
-        st.markdown(user_input)
-
     messages = st.session_state.messages.copy()
     messages.append({"role": "user", "content": user_input})
 
@@ -589,10 +560,9 @@ if user_input:
     st.session_state.messages = messages + [
         {"role": "assistant", "content": assistant_reply}
     ]
-    st.session_state.display_history.append((user_input, assistant_reply))
 
-    with st.chat_message("assistant"):
-        st.markdown(assistant_reply)
+    st.markdown(assistant_reply)
+
 
 # -----------------------------
 # Footer
