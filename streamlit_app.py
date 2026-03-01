@@ -394,6 +394,11 @@ with st.sidebar:
         key="processing_mode"
     )
 
+# -----------------------------
+# OUTPUT CONTAINER FOR INSTANT REPLACEMENT
+# -----------------------------
+output_container = st.container()
+    
     # -----------------------------
     # File uploader MUST be inside the sidebar
     # -----------------------------
