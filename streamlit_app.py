@@ -399,9 +399,9 @@ with st.sidebar:
 # -----------------------------
 output_container = st.container()
     
-    # -----------------------------
-    # File uploader MUST be inside the sidebar
-    # -----------------------------
+# -----------------------------
+# File uploader MUST be inside the sidebar
+# -----------------------------
     uploaded_file = st.file_uploader(
         "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
         type=["pdf", "txt", "png", "jpg", "jpeg"],
