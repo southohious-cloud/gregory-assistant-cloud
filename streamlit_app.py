@@ -20,6 +20,20 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ----------------------------------------
+# Scroll reset on every rerun
+# ----------------------------------------
+st.markdown("""
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const panel = document.querySelector('.output-panel');
+    if (panel) {
+        panel.scrollTop = 0;
+    }
+});
+</script>
+""", unsafe_allow_html=True)
+
 # -----------------------------
 # Initialize session state
 # -----------------------------
