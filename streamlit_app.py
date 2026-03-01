@@ -394,13 +394,7 @@ with st.sidebar:
         type=["pdf", "txt", "png", "jpg", "jpeg"],
         label_visibility="visible"
     )
-
-# -----------------------------
-# OUTPUT CONTAINER (main page)
-# -----------------------------
-output_container = st.container()
-    
-    if st.button("Reset Conversation"):
+if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "assistant", "content": "Online and ready. What would you like to do?"}
@@ -412,6 +406,13 @@ output_container = st.container()
         st.session_state.last_document_name = None
         st.session_state.last_document_summary = None
         st.rerun()
+
+# -----------------------------
+# OUTPUT CONTAINER (main page)
+# -----------------------------
+output_container = st.container()
+    
+    i
         
 # -----------------------------
 # Groq Chat Function
