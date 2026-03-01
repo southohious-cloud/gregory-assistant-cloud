@@ -527,6 +527,7 @@ if user_input:
 
     # Display
     st.markdown(assistant_reply)
+    
 # ----------------------------------------
 # Scroll reset on every rerun (content-aware)
 # ----------------------------------------
