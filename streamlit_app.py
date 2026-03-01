@@ -220,6 +220,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned_sections.append(f"### {header}\n\n{content}")
 
     return "\n\n".join(cleaned_sections).strip()
+    
 mode_instruction = {
     "Summary": """
 You are extracting the SUMMARY section from the document.
