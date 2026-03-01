@@ -523,7 +523,6 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
             unsafe_allow_html=True
         )
 
-
 # -----------------------------
 # ⭐ NEW: Post-output transformation buttons
 # -----------------------------
@@ -562,6 +561,8 @@ if action:
 
     st.session_state.last_document_summary = transformed
     st.rerun()
+
+
 
 
 # -----------------------------
