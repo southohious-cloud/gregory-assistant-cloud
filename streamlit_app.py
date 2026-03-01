@@ -492,8 +492,12 @@ if uploaded_file is not None or st.session_state.get("last_document_text"):
 user_input = st.chat_input("Type your message...")
 
 if user_input:
-    messages = st.session_state.messages.copy()
-    messages.append({"role": "user", "content": user_input})
+
+    # Build fresh messages list for the model
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": mode_instruction[st.session_state.processing_mode]},
+    ]
 
     # Add document context if available
     if st.session_state.last_document_text and st.session_state.last_document_name:
@@ -502,26 +506,27 @@ if user_input:
             f"Here is the document content (possibly truncated):\n\n"
             f"{st.session_state.last_document_text[:6000]}"
         )
-        messages.insert(
-            1,
-            {
-                "role": "system",
-                "content": (
-                    "You have access to the following document context. Use it to answer questions, "
-                    "extract tasks, create checklists, or explain sections when relevant.\n\n"
-                    + doc_context
-                ),
-            },
-        )
+        messages.append({
+            "role": "system",
+            "content": (
+                "You have access to the following document context. Use it to answer questions, "
+                "extract tasks, create checklists, or explain sections when relevant.\n\n"
+                + doc_context
+            ),
+        })
 
+    # Add user message
+    messages.append({"role": "user", "content": user_input})
+
+    # Call the model
     assistant_reply = call_groq(messages)
 
-    st.session_state.messages = messages + [
-        {"role": "assistant", "content": assistant_reply}
-    ]
+    # Save to session state
+    st.session_state.messages.append({"role": "user", "content": user_input})
+    st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
 
+    # Display
     st.markdown(assistant_reply)
-
 # ----------------------------------------
 # Scroll reset on every rerun (content-aware)
 # ----------------------------------------
