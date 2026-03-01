@@ -388,13 +388,7 @@ with st.sidebar:
         key="processing_mode"
     )
 
-    # File uploader MUST be inside the sidebar
-    uploaded_file = st.file_uploader(
-        "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
-        type=["pdf", "txt", "png", "jpg", "jpeg"],
-        label_visibility="visible"
-    )
-    if st.button("Reset Conversation"):
+       if st.button("Reset Conversation"):
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "assistant", "content": "Online and ready. What would you like to do?"}
@@ -411,7 +405,14 @@ with st.sidebar:
 # OUTPUT CONTAINER (main page)
 # -----------------------------
 output_container = st.container()
-      
+
+# File uploader MUST be inside the sidebar
+    uploaded_file = st.file_uploader(
+       "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
+        type=["pdf", "txt", "png", "jpg", "jpeg"],
+        label_visibility="visible"
+    )
+
 # -----------------------------
 # Groq Chat Function
 # -----------------------------
