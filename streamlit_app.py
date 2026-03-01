@@ -403,10 +403,10 @@ with st.sidebar:
 
 # File uploader MUST be inside the sidebar
 uploaded_file = st.file_uploader(
-       "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
-        type=["pdf", "txt", "png", "jpg", "jpeg"],
-        label_visibility="visible"
-    )
+    "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
+    type=["pdf", "txt", "png", "jpg", "jpeg"],
+    label_visibility="visible"
+)
 
 # -----------------------------
 # OUTPUT CONTAINER (main page)
