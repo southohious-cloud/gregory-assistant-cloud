@@ -21,16 +21,19 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ----------------------------------------
-# Scroll reset on every rerun
+# Scroll reset on every rerun (improved)
 # ----------------------------------------
 st.markdown("""
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+function resetScroll() {
     const panel = document.querySelector('.output-panel');
     if (panel) {
         panel.scrollTop = 0;
     }
-});
+}
+
+// Delay ensures Streamlit has rendered the panel before resetting scroll
+setTimeout(resetScroll, 50);
 </script>
 """, unsafe_allow_html=True)
 
