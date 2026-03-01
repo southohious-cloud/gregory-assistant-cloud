@@ -400,7 +400,6 @@ def call_groq(messages):
     )
     return response.choices[0].message.content
 
-
 # -----------------------------
 # REMOVE HISTORY COMPLETELY
 # -----------------------------
