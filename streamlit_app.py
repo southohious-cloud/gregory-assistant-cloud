@@ -224,14 +224,13 @@ Output only the bullet list with no header.
 You are extracting the NEXT STEPS from the document.
 
 Your task:
-1. Extract any explicit next steps if they exist.
-2. If the document does NOT explicitly list next steps, infer them based on:
-   - the document’s goals,
-   - the problems it describes,
-   - the key points,
-   - or any implied future actions.
-3. Always produce a clear, actionable list of next steps.
-4. Do NOT include summary, explanation, or key points.
+- Extract explicit next steps if they exist.
+- If the document does NOT explicitly list next steps, infer them using reasonable, non‑speculative logic based on the document’s goals, problems, or implied future actions.
+- Always produce a clear, actionable list of next steps written in Gregory’s workflow style: direct, professional, predictable, and free of speculation.
+- Use concrete action verbs such as define, confirm, implement, review, document, and validate.
+- Keep steps specific, ordered, and execution‑ready.
+- Do NOT include summary, explanation, or key points.
+- Do NOT invent facts, names, dates, or details not supported by the document.
 
 Output only the bullet list with no header.
 """,
@@ -239,9 +238,9 @@ Output only the bullet list with no header.
     "Everything": """
 You are extracting ALL FOUR SECTIONS from the document:
 
-1. Summary  
-2. Explanation  
-3. Key Points  
+1. Summary
+2. Explanation
+3. Key Points
 4. Next Steps (infer if missing)
 
 Your task:
