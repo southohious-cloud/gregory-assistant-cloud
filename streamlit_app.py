@@ -409,6 +409,12 @@ def render_collapsible_history(history):
 
 
 # -----------------------------
+# OUTPUT CONTAINER FOR INSTANT REPLACEMENT
+# -----------------------------
+output_container = st.container()
+
+
+# -----------------------------
 # FILE UPLOAD + AUTO-REPROCESS
 # -----------------------------
 
@@ -489,10 +495,11 @@ if uploaded_file is not None or (mode_changed and st.session_state.last_document
     st.session_state.last_document_summary = output
 
     # -----------------------------
-    # DISPLAY ONLY THE CURRENT OUTPUT
+    # DISPLAY ONLY THE CURRENT OUTPUT (INSTANT REPLACEMENT)
     # -----------------------------
-    st.markdown(f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}")
-    st.markdown(output)
+    with output_container:
+        st.markdown(f"### {st.session_state.processing_mode}: {st.session_state.last_document_name}")
+        st.markdown(output)
 
 
 # -----------------------------
@@ -520,8 +527,9 @@ if action:
     transformed = response.choices[0].message.content
 
     # Replace output directly
-    st.markdown(f"### {action}")
-    st.markdown(transformed)
+    with output_container:
+        st.markdown(f"### {action}")
+        st.markdown(transformed)
 
     st.session_state.last_document_summary = transformed
     st.rerun()
