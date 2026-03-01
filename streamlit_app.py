@@ -5,6 +5,22 @@ from PIL import Image
 import pdfplumber
 
 # -----------------------------
+# Fixed-height scrollable output panel (CSS)
+# -----------------------------
+st.markdown("""
+<style>
+.output-panel {
+    height: 450px;
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #ffffff;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -----------------------------
 # Initialize session state
 # -----------------------------
 if "messages" not in st.session_state:
