@@ -91,14 +91,18 @@ def enforce_bullet_points(text: str) -> str:
 
 
 # -----------------------------
-# Formatting Wrapper (Strict Single-Mode)
+# Formatting Wrapper (Strict Mode-Wide Enforcement)
 # -----------------------------
 def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
-    Ensures clean, consistent section headers for all modes.
-    Strips ALL model-generated headers.
-    Removes ALL extra sections in single-mode.
-    Enforces bullet formatting for Key Points and Next Steps.
+    Strict formatting enforcement for ALL modes:
+    - Strips ALL model-generated headers
+    - Removes ALL extra sections in single-mode
+    - Normalizes whitespace
+    - Normalizes bullet formatting
+    - Enforces paragraph-only output for Summary + Explanation
+    - Enforces bullet-only output for Key Points + Next Steps
+    - Enforces correct section order for Everything mode
     """
 
     text = raw_output.strip()
@@ -106,32 +110,50 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
     # All possible section headers the model might generate
     all_headers = ["Summary", "Explanation", "Key Points", "Next Steps"]
 
-    # Expected header for the selected mode
-    expected = [mode]
-
     # Normalize helper for header detection
     def normalize_header(line: str) -> str:
         return " ".join(line.strip().lower().replace(":", "").replace("#", "").split())
 
-    # -----------------------------------------
+    # -----------------------------
+    # GLOBAL CLEANUP FOR ALL MODES
+    # -----------------------------
+    # Remove accidental leading headers
+    for h in all_headers:
+        if text.lower().startswith(h.lower()):
+            text = text[len(h):].strip()
+
+    # Normalize whitespace
+    while "\n\n\n" in text:
+        text = text.replace("\n\n\n", "\n\n")
+
+    # Normalize bullets
+    lines = text.split("\n")
+    cleaned_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith(("* ", "• ", "‣ ", "- ")):
+            cleaned_lines.append("- " + stripped[2:].strip())
+        else:
+            cleaned_lines.append(stripped)
+    text = "\n".join(cleaned_lines).strip()
+
+    # -----------------------------
     # SINGLE-MODE BEHAVIOR
-    # -----------------------------------------
+    # -----------------------------
     if mode != "Everything":
 
         # Split into lines
         lines = text.split("\n")
-
-        # Remove ALL model-generated headers AND stop when a new section begins
         cleaned = []
+
         for line in lines:
             norm = normalize_header(line)
 
-            # If this line is ANY section header (Summary, Explanation, Key Points, Next Steps)
-            # AND it is NOT the selected mode → STOP (cut off extra sections)
+            # If this line is ANY section header that is NOT the selected mode → STOP
             if norm in [h.lower() for h in all_headers] and norm != mode.lower():
                 break
 
-            # If this line is the header for the selected mode → skip it
+            # Skip header for the selected mode
             if norm == mode.lower():
                 continue
 
@@ -139,18 +161,25 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         text = "\n".join(cleaned).strip()
 
-        # Add our clean header
-        text = f"### {mode}\n\n{text}"
+        # -----------------------------
+        # Mode-specific enforcement
+        # -----------------------------
+        if mode in ["Summary", "Explanation"]:
+            # Must be a single paragraph
+            text = text.replace("\n", " ").strip()
+            return text
 
-        # Bullet enforcement for Key Points + Next Steps
         if mode in ["Key Points", "Next Steps"]:
-            return enforce_bullet_points(text)
+            # Must be bullets only
+            bullets = [l for l in text.split("\n") if l.startswith("- ")]
+            return "\n".join(bullets).strip()
 
         return text
 
-    # -----------------------------------------
+    # -----------------------------
     # EVERYTHING MODE
-    # -----------------------------------------
+    # -----------------------------
+    # Split into sections (model usually separates with blank lines)
     parts = text.split("\n\n")
     cleaned_sections = []
 
@@ -169,12 +198,12 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
 
         # Bullet enforcement for Key Points + Next Steps
         if header in ["Key Points", "Next Steps"]:
-            content = enforce_bullet_points(content)
+            bullets = [l for l in content.split("\n") if l.startswith("- ")]
+            content = "\n".join(bullets).strip()
 
         cleaned_sections.append(f"### {header}\n\n{content}")
 
-    return "\n\n".join(cleaned_sections)
-
+    return "\n\n".join(cleaned_sections).strip()
 
 # -----------------------------
 # Post-Output Transformation Buttons
