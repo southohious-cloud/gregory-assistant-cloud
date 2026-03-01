@@ -111,14 +111,7 @@ def enforce_bullet_points(text: str) -> str:
 # -----------------------------
 def format_output_with_headers(raw_output: str, mode: str) -> str:
     """
-    Strict formatting enforcement for ALL modes:
-    - Strips ALL model-generated headers
-    - Removes ALL extra sections in single-mode
-    - Normalizes whitespace
-    - Normalizes bullet formatting
-    - Enforces paragraph-only output for Summary + Explanation
-    - Enforces bullet-only output for Key Points + Next Steps
-    - Enforces correct section order for Everything mode
+    Strict formatting enforcement for ALL modes.
     """
 
     text = raw_output.strip()
@@ -132,15 +125,15 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned = cleaned.replace(":", "").replace("#", "")
         return " ".join(cleaned.split())
 
-# -----------------------------
-# GLOBAL CLEANUP FOR ALL MODES
-# -----------------------------
-# Remove accidental leading headers ONLY in single-mode
+    # -----------------------------
+    # GLOBAL CLEANUP FOR ALL MODES
+    # -----------------------------
+    # Remove accidental leading headers ONLY in single-mode
     if mode != "Everything":
         for h in all_headers:
             if text.lower().startswith(h.lower()):
                 text = text[len(h):].lstrip(":").strip()
-            
+
     # Normalize whitespace
     while "\n\n\n" in text:
         text = text.replace("\n\n\n", "\n\n")
@@ -210,7 +203,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         # Remove stray leading punctuation
         content = content.lstrip(":").strip()
 
-        # Second-pass header stripping (handles model headers after blank lines)
+        # Second-pass header stripping
         content_lines = []
         for line in content.split("\n"):
             norm = normalize_header(line)
@@ -219,7 +212,7 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
             content_lines.append(line)
         content = "\n".join(content_lines).strip()
 
-        # Bullet enforcement for Key Points + Next Steps
+        # Bullet enforcement
         if header in ["Key Points", "Next Steps"]:
             bullets = [l for l in content.split("\n") if l.startswith("- ")]
             content = "\n".join(bullets).strip()
@@ -227,7 +220,6 @@ def format_output_with_headers(raw_output: str, mode: str) -> str:
         cleaned_sections.append(f"### {header}\n\n{content}")
 
     return "\n\n".join(cleaned_sections).strip()
-
 mode_instruction = {
     "Summary": """
 You are extracting the SUMMARY section from the document.
