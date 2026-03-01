@@ -384,18 +384,19 @@ with st.sidebar:
     st.markdown("### Document Processing Mode")
     processing_mode = st.radio(
         "Choose how I should process uploaded documents:",
-        [
-            "Summary",
-            "Explanation",
-            "Key Points",
-            "Next Steps",
-            "Everything"
-        ],
+        ["Summary", "Explanation", "Key Points", "Next Steps", "Everything"],
         key="processing_mode"
     )
 
+    # File uploader MUST be inside the sidebar
+    uploaded_file = st.file_uploader(
+        "Upload a file for instant processing (PDF, TXT, PNG, JPG)",
+        type=["pdf", "txt", "png", "jpg", "jpeg"],
+        label_visibility="visible"
+    )
+
 # -----------------------------
-# OUTPUT CONTAINER FOR INSTANT REPLACEMENT
+# OUTPUT CONTAINER (main page)
 # -----------------------------
 output_container = st.container()
     
