@@ -25,61 +25,41 @@ It’s built for users who value structure, speed, and reliability. Every mode p
 The assistant supports two complementary modes of operation: general chat intelligence and structured document processing. Together, they form a clarity‑engine workflow that handles both open‑ended reasoning and predictable, formatted output.
 
 General Chat Intelligence
-
 The assistant responds naturally to conversational prompts and supports a wide range of reasoning tasks, including:
 • 	concept explanations
-• 	research-style synthesis using information the user provides
+• 	research‑style synthesis using information the user provides
 • 	planning and organization
 • 	drafting and rewriting
 • 	brainstorming
-• 	context-aware Q&A
-
+• 	context‑aware Q&A
 This mode activates automatically whenever the user types a message instead of uploading a document.
-
 Document Processing Modes
-
 When a file is uploaded (PDF, TXT, PNG, JPG), the assistant applies one of five structured processing modes:
 • 	Summary
 • 	Explanation
 • 	Key Points
 • 	Next Steps
 • 	Everything
-
 Each mode produces a predictable, structured output following clarity‑engine formatting.
-
 Multi‑Format Ingestion
-
 The assistant interprets both text and images, enabling workflows such as reading PDFs, extracting text from screenshots, processing photos of physical pages, and handling plain text files.
-
 Clarity‑Engine Behavior
-
 All outputs follow clarity‑engine principles: predictable structure, consistent formatting, no filler, no drift, and instantly replaceable output.
 
-## How It Works
-
-The assistant follows a two‑path workflow: Chat Mode for open‑ended reasoning and Document Mode for structured processing. It automatically chooses the correct path based on what the user does
-
+How It Works
+The assistant follows a two‑path workflow: Chat Mode for open‑ended reasoning and Document Mode for structured processing. It automatically chooses the correct path based on what the user does.
 Chat Mode
-
 Chat Mode activates whenever the user types a message. The assistant treats the input as a conversational request and responds with explanations, planning, drafting, synthesis, or Q&A. This mode is free‑form and context‑aware.
-
 Document Mode
-
 Document Mode activates when a file is uploaded. The assistant reads the document and applies the selected processing mode, producing structured clarity‑engine output. Document Mode always replaces the previous output to keep the workspace clean.
-
 Automatic Routing
-
 The assistant decides which workflow to use based on the user’s action:
-
 • 	typing a message → Chat Mode
 • 	uploading a file → Document Mode
 • 	switching modes → changes how the next uploaded file is processed
-
 No commands or special syntax are required.
-
 Output Behavior
-
-All responses—chat or document—follow the same clarity‑engine principles to keep the experience predictable and binder‑ready.
+All responses — chat or document — follow the same clarity‑engine principles to keep the experience predictable and binder‑ready.
 
 ## Local and Cloud Versions
 
