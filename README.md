@@ -151,3 +151,5 @@ These constraints keep the experience consistent, predictable, and aligned with 
 ## **License**
 
 This project is released under the MIT License. You are free to use, modify, and distribute the software, provided that the original license terms are included in any copies or substantial portions of the software.
+
+This project is public for transparency and reference, but it is not open to external contributions. Issues are welcome; pull requests will not be accepted.
