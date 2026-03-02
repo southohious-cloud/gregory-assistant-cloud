@@ -20,92 +20,66 @@ It’s built for users who value structure, speed, and reliability. Every mode p
 
 ---
 
-## Core Features
+## Capabilities
 
-### Document Processing Modes
+The assistant supports two complementary modes of operation: general chat intelligence and structured document processing. Together, they form a clarity‑engine workflow that handles both open‑ended reasoning and predictable, formatted output.
 
-Five focused modes turn any uploaded file into clean, structured output. Each mode is designed for fast comprehension and immediate use in client deliverables, internal documentation, or personal systems.
+General Chat Intelligence
 
-- **Summary** — Condenses the document into a clear, high‑level overview.  
-- **Explanation** — Breaks down complex material into accessible, digestible language.  
-- **Key Points** — Extracts the essential ideas with zero filler.  
-- **Next Steps** — Generates actionable, logically ordered steps aligned with professional workflows.  
-- **Everything** — Produces all four outputs at once for a complete clarity package.
+The assistant responds naturally to conversational prompts and supports a wide range of reasoning tasks, including:
+• 	concept explanations
+• 	research-style synthesis using information the user provides
+• 	planning and organization
+• 	drafting and rewriting
+• 	brainstorming
+• 	context-aware Q&A
 
-### Instant Rewrite & Transformation Tools
+This mode activates automatically whenever the user types a message instead of uploading a document.
 
-A suite of one‑click transformations reshapes any document into the exact format you need.
+Document Processing Modes
 
-- Rewrite simpler for clarity and accessibility.  
-- Rewrite more formal for client‑facing or executive communication.  
-- Rewrite as email for immediate outreach or follow‑up.  
-- Rewrite as checklist for task‑driven workflows.  
-- Rewrite as step‑by‑step plan for structured execution.  
-- Explain deeper for training, onboarding, or technical understanding.
+When a file is uploaded (PDF, TXT, PNG, JPG), the assistant applies one of five structured processing modes:
+• 	Summary
+• 	Explanation
+• 	Key Points
+• 	Next Steps
+• 	Everything
 
-### Clean, Predictable Interface
+Each mode produces a predictable, structured output following clarity‑engine formatting.
 
-The layout is intentionally minimal, with no distractions or unnecessary UI elements. Every interaction is designed to feel immediate and tool‑like, reinforcing the clarity‑engine philosophy of predictable, repeatable output.
+Multi‑Format Ingestion
 
-### Fast, Frictionless Workflow
+The assistant interprets both text and images, enabling workflows such as reading PDFs, extracting text from screenshots, processing photos of physical pages, and handling plain text files.
 
-The assistant processes documents instantly and displays results in a stable, centered output panel. Upload a file, choose a mode, and receive structured output without navigating menus or waiting for page reloads.
+Clarity‑Engine Behavior
 
-### Cloud + Local Parity
-
-The cloud version mirrors the local version’s behavior, ensuring consistent results whether you’re working on your desktop or accessing the tool remotely. The experience is unified, reliable, and intentionally simple.
-
-### Broad File Support
-
-Upload common formats without conversion or preprocessing.
-
-- PDF  
-- TXT  
-- PNG  
-- JPG / JPEG  
-
-### Reset‑Ready Design
-
-A single click resets the conversation and clears the interface, allowing you to start fresh without refreshing the page or losing your workflow rhythm.
-
----
+All outputs follow clarity‑engine principles: predictable structure, consistent formatting, no filler, no drift, and instantly replaceable output.
 
 ## How It Works
 
-### Upload a Document
+The assistant follows a two‑path workflow: Chat Mode for open‑ended reasoning and Document Mode for structured processing. It automatically chooses the correct path based on what the user does
 
-Drag in a PDF, TXT, PNG, JPG, or JPEG. The assistant immediately ingests the file and prepares it for processing. There’s no configuration, no menus, and no setup — the workflow begins the moment the file is added.
+Chat Mode
 
-### Choose a Processing Mode
+Chat Mode activates whenever the user types a message. The assistant treats the input as a conversational request and responds with explanations, planning, drafting, synthesis, or Q&A. This mode is free‑form and context‑aware.
 
-Select the output style you need from the left‑side mode selector. Each mode is intentionally narrow and predictable, producing clean, structured results every time.
+Document Mode
 
-### Review the Output
+Document Mode activates when a file is uploaded. The assistant reads the document and applies the selected processing mode, producing structured clarity‑engine output. Document Mode always replaces the previous output to keep the workspace clean.
 
-The processed result appears in the centered output panel in a clean, readable format. The layout keeps your attention on the content, not the interface.
+Automatic Routing
 
-### Apply Transformations
+The assistant decides which workflow to use based on the user’s action:
 
-Use the Additional Options panel to reshape the document into the exact format you need. Transformations are immediate and consistent.
+• 	typing a message → Chat Mode
+• 	uploading a file → Document Mode
+• 	switching modes → changes how the next uploaded file is processed
 
-### Reset and Start Fresh
+No commands or special syntax are required.
 
-A single reset clears the interface and returns the assistant to a ready state, keeping the workflow clean and preventing clutter.
+Output Behavior
 
----
-
-## Supported File Types
-
-Your assistant accepts the most common formats used in professional and personal workflows:
-
-- **PDF** — Ideal for client deliverables, reports, scanned documents, and exported materials.  
-- **TXT** — Perfect for raw notes, drafts, logs, and lightweight text files.  
-- **PNG** — Supports screenshots, diagrams, and image‑based content.  
-- **JPG / JPEG** — Handles photos, scanned pages, and mobile captures.
-
-These formats cover the majority of everyday use cases, allowing users to drop in whatever they have and get structured output instantly.
-
----
+All responses—chat or document—follow the same clarity‑engine principles to keep the experience predictable and binder‑ready.
 
 ## Local and Cloud Versions
 
