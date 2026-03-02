@@ -61,44 +61,47 @@ No commands or special syntax are required.
 Output Behavior
 All responses — chat or document — follow the same clarity‑engine principles to keep the experience predictable and binder‑ready.
 
-## Local and Cloud Versions
+Usage 
+The assistant works through two simple interaction patterns:
+Using Chat Mode
+Type directly into the message box.
+Chat Mode is ideal for explanations, planning, drafting, brainstorming, and general reasoning. No commands or formatting are required — just write naturally.
+Using Document Mode
+Upload a file (PDF, TXT, PNG, JPG).
+Choose a processing mode, and the assistant will generate structured clarity‑engine output. Each upload replaces the previous output to keep the workspace clean.
+Switching Modes
+Select a different mode before uploading your next file.
+The assistant will apply that mode to the next document you provide.
 
-### Local Version
+Modes Overview 
+Each mode transforms the uploaded document in a specific, predictable way:
+• 	Summary — Condenses the material while preserving structure and meaning.
+• 	Explanation — Expands the content for clarity and understanding.
+• 	Key Points — Extracts essential ideas in clean, actionable bullets.
+• 	Next Steps — Generates forward‑moving tasks based on the document.
+• 	Everything — Produces a full clarity‑engine packet combining all modes.
+These modes ensure consistent, binder‑ready output across all document types.
 
-Runs directly on the user’s machine for maximum speed and privacy. Ideal for offline work, sensitive documents, or environments where local control is preferred.
+Installation / Access 
+The assistant runs in a clean, browser‑based interface.
+No installation, setup, or configuration is required.
+To use it:
+1. 	Open the assistant in your browser.
+2. 	Type messages for Chat Mode or upload a file for Document Mode.
+3. 	Select a processing mode when working with documents.
+4. 	Copy or save the output as needed.
+The interface is designed to stay minimal, predictable, and distraction‑free.
 
-### Cloud Version
+Notes / Limitations 
+The assistant is optimized for clarity‑engine workflows and has a few intentional constraints:
+• 	It does not store past outputs; each result replaces the previous one.
+• 	It avoids decorative formatting, emojis, or stylistic drift.
+• 	It does not perform web browsing or external data retrieval.
+• 	It relies entirely on the content you provide in chat or through uploaded files.
+• 	It is designed for structured clarity, not creative fiction or long‑form narrative generation.
+These constraints keep the experience consistent, predictable, and aligned with clarity‑engine principles.
 
-Accessible from any device with an internet connection. Offers the same clean layout, processing modes, and transformation tools.
+License 
+This project is released under the MIT License.
+You are free to use, modify, and distribute the software, provided that the original license terms are included in any copies or substantial portions of the software.
 
-### Unified Experience
-
-Both versions share the same clarity‑engine philosophy: predictable output, minimal UI, and instant results. Users can switch between local and cloud without adjusting their workflow.
-
----
-
-## License
-
-```
-MIT License
-
-Copyright (c) 2026 Gregory
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the “Software”), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-```
