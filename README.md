@@ -3,6 +3,7 @@
 A streamlined, document‑focused assistant designed for fast, predictable, and distraction‑free processing across summary, explanation, key‑point extraction, next‑step generation, and structured rewrites.
 
 [![Screenshot](Screenshot%202026-03-01%20191302.png)](Screenshot%202026-03-01%20191302.png)
+
 ---
 
 ## Why This Exists
