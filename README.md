@@ -8,7 +8,7 @@ A streamlined assistant designed for two complementary workflows: natural, gener
 
 ## Why This Exists
 
-Most AI tools try to do everything and end up feeling noisy, unpredictable, and overloaded. Gregory’s Personal Assistant takes the opposite approach. It is intentionally narrow, structured, and reliable — a clarity engine designed for people who value order, precision, and workflow momentum. Every mode is predictable. Every transformation is consistent. The interface stays out of the way so the work can stay front and center.
+People need two kinds of help: open‑ended thinking and structured clarity. Most tools do one or the other. This assistant combines both. It supports natural conversation for questions, ideas, and planning, and it delivers consistent, binder‑ready structure when processing documents. The goal is a single workspace that stays predictable, distraction‑free, and aligned with clarity‑engine principles.
 
 ---
 
