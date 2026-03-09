@@ -1,5 +1,8 @@
 # Gregory’s Personal Assistant — Clarity‑Engine Edition
 
+### Run the Assistant  
+https://clarity-assistant.streamlit.app
+
 A streamlined assistant designed for two complementary workflows: natural, general‑purpose chat for explanations, planning, drafting, and reasoning, and a structured document‑processing engine for PDFs, text files, and images. Chat Mode handles everyday thinking tasks, while Document Mode provides predictable, clarity‑engine output when files are uploaded.
 
 [![Screenshot](Screenshot%202026-03-01%20191302.png)](Screenshot%202026-03-01%20191302.png)
